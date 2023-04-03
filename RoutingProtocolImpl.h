@@ -3,6 +3,7 @@
 
 #include "RoutingProtocol.h"
 #include <unordered_map>
+#include "TblEntry.h"
 
 class RoutingProtocolImpl : public RoutingProtocol {
   public:
@@ -51,16 +52,16 @@ class RoutingProtocolImpl : public RoutingProtocol {
     void printDVTbl();
     void linkCheck();
     pair<uint16_t, uint16_t> getDistance(uint16_t dest);
-    pair<uint16_t, uint16_t> findMinPath(unordered_map<uint16_t, uint16_t> pathToDest);
+    std::pair<std::uint16_t, TblEntry> findMinPath(unordered_map<std::uint16_t, TblEntry> pathToDest);
   //  vector<pair<uint16_t, uint16_t>> updateNgbr(uint16_t dest, uint16_t delay, uint16_t nextHop);
     vector<pair<uint16_t, uint16_t>> updateNgbr(uint16_t nextHop, uint16_t delay, unsigned short port);
-    int pingEvent = PING;
-    int linkCheckEvent = 10;
+    int pingEvent = 12;
     int dvCheck = 11;
+    int linkCheckEvent = 13;
     std::unordered_map<unsigned short, pair<uint16_t, uint32_t>> portStatus;
     std::unordered_map<uint16_t,std::pair<unsigned short, uint16_t>> linkCosts;
     std::unordered_map<uint16_t,std::pair<uint16_t, uint16_t>> routingTbl;
-    std::unordered_map<uint16_t, std::unordered_map<uint16_t, uint16_t>> dvTbl;
+    std::unordered_map<uint16_t, std::unordered_map<uint16_t, TblEntry>> dvTbl;
     void handleDVPkg(void* pkg, unsigned short port);
     void printPortStatus();
     void sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16_t dest, uint16_t port, bool isNew);

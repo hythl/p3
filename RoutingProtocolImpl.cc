@@ -386,9 +386,9 @@ void RoutingProtocolImpl::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, u
 void RoutingProtocolImpl::printDVTbl(){
 //	cout<<"start to print dvTbl \n";
 	for(auto pairs: dvTbl){
-		unordered_map<uint16_t, uint16_t> paths = pairs.second;
+		unordered_map<uint16_t, TblEntry> paths = pairs.second;
 		for(auto path: paths){
-			cout<<pairs.first << " " << path.first << " " << path.second << "\n";
+			cout<<pairs.first << " " << path.first << " " << path.second.cost <<" " << path.second.time << "\n";
 		}
 	}
 }
@@ -408,7 +408,7 @@ vector<pair<uint16_t, uint16_t>> RoutingProtocolImpl::updateNgbr(uint16_t nextHo
 //	}
 
         if(dvTbl.count(nextHop) == 0){
-                dvTbl[nextHop] = unordered_map<uint16_t, uint16_t>();
+                dvTbl[nextHop] = unordered_map<uint16_t, TblEntry>();
         }
 /**
         if(linkCosts.count(nextHop) == 0){
@@ -430,9 +430,10 @@ vector<pair<uint16_t, uint16_t>> RoutingProtocolImpl::updateNgbr(uint16_t nextHo
 		return empty;
 	}
 */
+	uint32_t curTime = sys->time();
 	if(routingTbl.count(nextHop) == 0 || routingTbl[nextHop].second == 0xffff){
 		routingTbl[nextHop] = pair<uint16_t, uint16_t>(nextHop, delay);
-		dvTbl[nextHop][nextHop] = delay;
+		dvTbl[nextHop][nextHop] = TblEntry(delay, curTime);
 		changedMinDist.push_back(pair<uint16_t, uint16_t>(nextHop, delay));
 		return changedMinDist;
 	}
@@ -442,30 +443,30 @@ vector<pair<uint16_t, uint16_t>> RoutingProtocolImpl::updateNgbr(uint16_t nextHo
 		oldDistToNextHop = 0;
 	}
 	else{
-		oldDistToNextHop = dvTbl[nextHop][nextHop];	
+		oldDistToNextHop = dvTbl[nextHop][nextHop].cost;	
 	}
 
 	if(oldDistToNextHop != delay){
 		changedMinDist.push_back(pair<uint16_t, uint16_t>(nextHop, delay));
 		for(auto it: dvTbl){
-			unordered_map<uint16_t, uint16_t> path = it.second;
-			if(path.count(nextHop) != 0 && (path[nextHop] != 0xffff || it.first == nextHop)){
-				uint16_t newDistToDest = path[nextHop] - oldDistToNextHop + delay;
+			unordered_map<uint16_t, TblEntry> path = it.second;
+			if(path.count(nextHop) != 0 && (path[nextHop].cost != 0xffff || it.first == nextHop)){
+				uint16_t newDistToDest = path[nextHop].cost - oldDistToNextHop + delay;
 				if(delay == 0xffff){
 					newDistToDest = 0xffff;
 				}
 				cout<<"new DIst is " << newDistToDest << " to " << it.first  <<"\n";
-				path[nextHop] = newDistToDest;
+				path[nextHop] = TblEntry(newDistToDest, curTime);
 				it.second = path;
 				dvTbl[it.first] = it.second;	
-				pair<uint16_t, uint16_t> newMinPair = findMinPath(path);
-				if(newMinPair.second != routingTbl[it.first].second){
-					routingTbl[it.first] = newMinPair;
-                                	changedMinDist.push_back(pair<uint16_t, uint16_t>(it.first, newMinPair.second));
+				pair<uint16_t, TblEntry> newMinPair = findMinPath(path);
+				if(newMinPair.second.cost != routingTbl[it.first].second){
+					routingTbl[it.first] = pair<uint16_t, uint16_t>(newMinPair.first, newMinPair.second.cost);
+                                	changedMinDist.push_back(pair<uint16_t, uint16_t>(it.first, newMinPair.second.cost));
 				}
 			}
 		}
-		dvTbl[nextHop][nextHop] = delay;
+		dvTbl[nextHop][nextHop] = TblEntry(delay, curTime);
 	}
 	return changedMinDist;
 }
@@ -477,6 +478,7 @@ vector<pair<uint16_t, uint16_t>> RoutingProtocolImpl::updateNonNgbr(uint16_t src
 		cout<< "no way to reach " << src << "\n";
 		return changedMinDist;
 	}
+	uint32_t curTime = sys->time();
 //	if(delay == 0xffff){
 //                changedMinDist.push_back(pair<uint16_t, uint16_t>(src, routingTbl[src].second));
 //		return changedMinDist;
@@ -484,12 +486,12 @@ vector<pair<uint16_t, uint16_t>> RoutingProtocolImpl::updateNonNgbr(uint16_t src
 	pair<uint16_t, uint16_t> distPairToSrc = linkCosts[src];
         uint16_t distToSrc = distPairToSrc.second;
 	if(dvTbl.count(dest) == 0){
-		dvTbl[dest] = unordered_map<uint16_t, uint16_t>();
+		dvTbl[dest] = unordered_map<uint16_t, TblEntry>();
 		uint16_t newDist = distToSrc + delay;
 		if(delay == 0xffff){
 			newDist = 0xffff;
 		}
-		dvTbl[dest][src] = newDist;
+		dvTbl[dest][src] = TblEntry(newDist, curTime);
 		routingTbl[dest] = pair<uint16_t, uint16_t>(src, newDist);
 		changedMinDist.push_back(pair<uint16_t, uint16_t>(dest, newDist));
 //		cout<<"change add to list dest: " << distPairToSrc.first << " cost: " << distToSrc + delay << "\n";
@@ -497,17 +499,17 @@ vector<pair<uint16_t, uint16_t>> RoutingProtocolImpl::updateNonNgbr(uint16_t src
 		return changedMinDist;
 	}
 	
-	unordered_map<uint16_t, uint16_t> paths = dvTbl[dest];
+	unordered_map<uint16_t, TblEntry> paths = dvTbl[dest];
 	uint16_t newDistToDest = distToSrc + delay;
 	if(delay == 0xffff){
 		newDistToDest = 0xffff;
 	}
-	paths[src] = newDistToDest;
+	paths[src] = TblEntry(newDistToDest, curTime);
 	dvTbl[dest] = paths;
-	pair<uint16_t, uint16_t> minPath = findMinPath(paths);
-	if(minPath.second != routingTbl[dest].second){
-		routingTbl[dest] = minPath;
-        	changedMinDist.push_back(pair<uint16_t, uint16_t>(dest, minPath.second));	
+	pair<uint16_t, TblEntry> minPath = findMinPath(paths);
+	if(minPath.second.cost != routingTbl[dest].second){
+		routingTbl[dest] = pair<uint16_t, uint16_t>(minPath.first, minPath.second.cost);
+        	changedMinDist.push_back(pair<uint16_t, uint16_t>(dest, minPath.second.cost));	
 	}
 	return changedMinDist;	
 //	for(auto pathsPair: dvTbl[dest]){
@@ -566,10 +568,10 @@ vector<pair<uint16_t, uint16_t>> RoutingProtocolImpl::updateNonNgbr(uint16_t src
 	return changedMinDist;
 }
 */
-pair<uint16_t, uint16_t> RoutingProtocolImpl::findMinPath(unordered_map<uint16_t, uint16_t> pathToDest){
-	pair<uint16_t, uint16_t> minPath = pair<uint16_t, uint16_t>(0xffff, 0xffff);
+pair<uint16_t, TblEntry> RoutingProtocolImpl::findMinPath(unordered_map<uint16_t, TblEntry> pathToDest){
+	pair<uint16_t, TblEntry> minPath = pair<uint16_t, TblEntry>(0xffff, TblEntry(0xffff, 0xffffffff));
 	for(auto path: pathToDest){
-		if(path.second < minPath.second){
+		if(path.second.cost < minPath.second.cost){
 			minPath = path;
 		}
 	}

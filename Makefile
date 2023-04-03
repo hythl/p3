@@ -7,7 +7,8 @@ OBJS =\
 	Link.o\
 	Node.o\
 	RoutingProtocolImpl.o\
-	Simulator.o
+	Simulator.o\
+	TblEntry.o
 
 HEADRES =\
 	global.h\
@@ -15,7 +16,8 @@ HEADRES =\
 	Link.h\
 	Node.h\
 	RoutingProtocol.h\
-	Simulator.h
+	Simulator.h\
+	TblEntry.h
 
 %.o: %.cc
 	$(CC) $(COPTS) -c $< -o $@
@@ -26,11 +28,12 @@ Simulator: $(OBJS)
 	$(CC) $(LKOPTS) -o Simulator $(OBJS)
 
 $(OBJS): global.h
-Event.o: Event.h Link.h Node.h Simulator.h
-Link.o: Event.h Link.h Node.h Simulator.h
-Node.o: Event.h Link.h Node.h Simulator.h
-Simulator.o: Event.h Link.h Node.h RoutingProtocol.h Simulator.h 
-RoutingProtocolImpl.o: RoutingProtocolImpl.h
+Event.o: Event.h Link.h Node.h Simulator.h TblEntry.h
+Link.o: Event.h Link.h Node.h Simulator.h TblEntry.h
+Node.o: Event.h Link.h Node.h Simulator.h TblEntry.h
+Simulator.o: Event.h Link.h Node.h RoutingProtocol.h Simulator.h TblEntry.h 
+RoutingProtocolImpl.o: RoutingProtocolImpl.h TblEntry.h
+DvEntry.o: TblEntry.h
 
 clean:
 	rm -f *.o Simulator
