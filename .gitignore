@@ -1,0 +1,4 @@
+*.out
+
+# professor's test
+!simpletest* 
