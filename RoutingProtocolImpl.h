@@ -43,7 +43,7 @@ class RoutingProtocolImpl : public RoutingProtocol {
     unsigned short numOfPorts;
     unsigned short routerId;
     eProtocolType protocolType;
-    void handleDataPkg();
+   // void handleDataPkg();
     void sendPing();
     void sendPong(uint16_t src, uint32_t timeStamp, unsigned short port);
     void handlePongPkg(void* pkg, unsigned short port);
@@ -58,12 +58,17 @@ class RoutingProtocolImpl : public RoutingProtocol {
     int pingEvent = 12;
     int dvCheck = 11;
     int linkCheckEvent = 13;
+    int entryCheckEvent = 14;
+    int updateEvent = 15;
+    void handleDataPkg(void* pkg);
+    void handleUpdateEvent();
     std::unordered_map<unsigned short, pair<uint16_t, uint32_t>> portStatus;
     std::unordered_map<uint16_t,std::pair<unsigned short, uint16_t>> linkCosts;
     std::unordered_map<uint16_t,std::pair<uint16_t, uint16_t>> routingTbl;
     std::unordered_map<uint16_t, std::unordered_map<uint16_t, TblEntry>> dvTbl;
     void handleDVPkg(void* pkg, unsigned short port);
     void printPortStatus();
+    void entryCheck();
     void sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16_t dest, uint16_t port, bool isNew);
     void sendUpdateToAll(vector<pair<uint16_t, uint16_t>> changes, bool isNew, uint16_t src);
     vector<pair<uint16_t, uint16_t>> updateNonNgbr(uint16_t src, uint16_t dest, uint16_t delay);

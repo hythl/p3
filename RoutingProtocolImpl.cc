@@ -2,7 +2,7 @@
 #include <iostream>
 #include <arpa/inet.h>
 #include "Node.h"
-
+#include <set>
 #define DATAPORT 0xffff
 #define DATA_TYPE 0x01
 #define PING_TYPE 0x02
@@ -39,8 +39,11 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
 //        *pingEvent = 1;
 	cout<<"Try to init \n";
 //	cout<<"PingEbent is " << *pingEvent << "at " << pingEvent << "\n";
-        sys->set_alarm(this, 10000, &(this->pingEvent));
-	sys->set_alarm(this, 1000, &(this->linkCheckEvent)); 
+//        sys->set_alarm(this, 10000, &(this->pingEvent));
+	sendPing();
+	sys->set_alarm(this, 1000, &(this->linkCheckEvent));
+	sys->set_alarm(this, 1000, &(this->entryCheckEvent));
+        sys->set_alarm(this, 30000, &(this->updateEvent)); 
 	cout<<"Success in set alarm on " << router_id << "\n";
 //	cout<<"Ping event is " << this->pingEvent << "\n";
 	fflush(stdout);
@@ -60,6 +63,14 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 		cout<<"link check invoked \n";
 		linkCheck();
 	}
+	if(*typeOfEvent == this->entryCheckEvent){
+		cout<<"entry check invoked \n";
+		entryCheck();
+	}
+	if(*typeOfEvent == this->updateEvent){
+		cout<<"update event invoked \n";
+		handleUpdateEvent();
+	}
 //	printPortStatus();
 //	switch(*typeOfEvent){
 //		case this->pingEvent:
@@ -71,6 +82,38 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
 //	}
 //	free(data);	
   // add your own code
+}
+
+void RoutingProtocolImpl::handleUpdateEvent(){
+	vector<pair<uint16_t, uint16_t>> datas;
+	for(auto routingEntry: routingTbl){
+		if(routingEntry.second.second == 0xffff){
+			continue;
+		}
+		datas.push_back(pair<uint16_t, uint16_t>(routingEntry.first, routingEntry.second.second));
+	}
+	sendUpdateToAll(datas, false, routerId);
+	sys->set_alarm(this, 30000, &(this->updateEvent));	
+}
+
+void RoutingProtocolImpl::entryCheck(){
+	uint32_t curTime = sys->time();
+	for(auto tblPair: dvTbl){
+		unordered_map<uint16_t, TblEntry> paths= tblPair.second;
+		uint16_t dest = tblPair.first;
+		for(auto path: paths){
+			uint32_t lastSeen = path.second.time;
+			uint16_t nextHop = path.first;
+			uint16_t cost = path.second.cost;
+			if(curTime - lastSeen > 45000 && cost != 0xffff){
+				cout<<"path from " << routerId << " to " << dest << " through " << nextHop << " expires \n";
+				if(nextHop != dest){
+					sendUpdateToAll(updateNonNgbr(nextHop, dest, 0xffff), false, nextHop);
+				}
+			}
+		}		
+	}
+	sys->set_alarm(this, 1000, &(this->entryCheckEvent));			
 }
 
 
@@ -119,8 +162,8 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
   //      fflush(stdout);
  // 	printPortStatus();
   	if(port == DATAPORT){
-		free(packet);
 		cout<<"Receive data pkg \n";
+		handleDataPkg(packet);
 		return;
 	}
 	uint8_t* packetTypePkg = (uint8_t*) packet;
@@ -143,11 +186,38 @@ void RoutingProtocolImpl::recv(unsigned short port, void *packet, unsigned short
 //			cout<<"Receive DV packet" << "\n";
 			handleDVPkg(packet, port);
 			break;
+		case DATA:
+			cout <<"Receive data packet" << "\n";
+			handleDataPkg(packet);			
+			break;
     		default:
       			break;
   	}
 //	free(packet);
 //	printPortStatus();
+}
+
+void RoutingProtocolImpl::handleDataPkg(void *pkg){
+	uint16_t* temp = (uint16_t*) pkg;
+//        uint16_t pkgType = ntohs(*temp);
+        uint16_t size = ntohs(*(temp + 1));
+//        uint16_t src = ntohs(*(temp + 2));
+        uint16_t dest = ntohs(*(temp + 3));
+	if(dest != routerId){
+		if(routingTbl.count(dest) == 0 || routingTbl[dest].second == 0xffff){
+			cout << "drop packet since no path to destination found " << "\n";
+			free(pkg);
+			return;
+		}
+		cout <<"dest for DATA pkt is " << dest << "\n";
+		unsigned short nextPort = linkCosts[routingTbl[dest].first].first; 		
+		sys->send(nextPort, pkg, size);
+	}
+	else{
+		cout<<"data received at " << routerId << "\n";
+		free(pkg);
+		return;		
+	}
 }
 
 void RoutingProtocolImpl::handleDVPkg(void* pkg, unsigned short port){
@@ -156,6 +226,7 @@ void RoutingProtocolImpl::handleDVPkg(void* pkg, unsigned short port){
         uint16_t size = ntohs(*(temp + 1));
         uint16_t src = ntohs(*(temp + 2));
 	uint16_t dest = ntohs(*(temp + 3));
+//	printPortStatus();
 	if(dest != routerId){
 		if(routingTbl.count(dest) == 0){
 			cout<<"can not find a path to " << dest << " on node " << routerId << "\n";
@@ -213,14 +284,15 @@ void RoutingProtocolImpl::handleDVPkg(void* pkg, unsigned short port){
 		sendUpdateToAll(realChanges, false, src);
 	}
 	free(pkg);
+//	printPortStatus();
 //	sendUpdateToAll(realChanges);	
 }
 
 // add more of your own code
-void RoutingProtocolImpl::handleDataPkg(){
-  cout << "Data generated \n";
-  fflush(stdout);
-}
+//void RoutingProtocolImpl::handleDataPkg(){
+//  cout << "Data generated \n";
+//  fflush(stdout);
+//}
 
 void RoutingProtocolImpl::handlePingPkg(void* pkg, unsigned short port){
 //	cout<<"Receive pkg on node " << this->routerId << "\n";
@@ -289,16 +361,16 @@ void RoutingProtocolImpl::handlePongPkg(void* pkg, unsigned short port){
         cout<<"Receive PONG on node " << this->routerId << " with type "
         << pkgType << " with size " << size << " timeStamp " << timeStamp <<
         " from " << src << "\n";
-	printPortStatus();
+//	printPortStatus();
 //	portStatus[port] = std::pair<uint16_t, uint32_t>(src, sys->time());
 //	cout<<"src inserted is " << src << "\n";
 //	linkCosts[src] = std::pair<unsigned short, uint16_t>(port, delay);
 //	vector<pair<uint16_t, uint16_t>> changedRouting = updateNgbr(src, delay, src);
 	unsigned short nextPort = port;
-	if(routingTbl.count(src) != 0){
-		uint16_t nextNode = routingTbl[src].first;
-		nextPort = linkCosts[nextNode].first;
-	}
+//	if(routingTbl.count(src) != 0){
+//		uint16_t nextNode = routingTbl[src].first;
+//		nextPort = linkCosts[nextNode].first;
+//	}
 	vector<pair<uint16_t, uint16_t>> changedRouting = updateNgbr(src, delay, nextPort);
 	cout<< "DV table update to \n";
 	printDVTbl();
@@ -313,9 +385,10 @@ void RoutingProtocolImpl::handlePongPkg(void* pkg, unsigned short port){
 	portStatus[port] = std::pair<uint16_t, uint32_t>(src, sys->time());
       //  cout<<"src inserted is " << src << "\n";
 	linkCosts[src] = std::pair<unsigned short, uint16_t>(port, delay);
+//	printPortStatus();
 	sendUpdateToAll(changedRouting, isNew, src);
 	free(pkg);
-	printPortStatus();
+//	printPortStatus();
 //	sendUpdateToAll(changedRouting);	
 //	cout<< "sucess until here \n";
 //	minDistances[src] = std::pair<unsigned short, uint32_t>(port, delay);
@@ -342,9 +415,9 @@ void RoutingProtocolImpl::sendUpdateToAll(vector<pair<uint16_t, uint16_t>> chang
 
 void RoutingProtocolImpl::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16_t dest, uint16_t port, bool isNew){
 	cout<< "send update to " << dest << "from node" << routerId << "\n";
-	vector<pair<uint16_t, uint16_t>> changeCopy;
+	set<pair<uint16_t, uint16_t>> changeCopy;
 	for(auto change: changes){
-		changeCopy.push_back(change);
+		changeCopy.insert(change);
 	}
 	vector<pair<uint16_t, uint16_t>> changesPoisonRv;
 	if(isNew){
@@ -352,7 +425,7 @@ void RoutingProtocolImpl::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, u
 			if(routingEntry.second.second == 0xffff){
 				continue;
 			}
-			changeCopy.push_back(pair<uint16_t, uint16_t>(routingEntry.first, routingEntry.second.second));			
+			changeCopy.insert(pair<uint16_t, uint16_t>(routingEntry.first, routingEntry.second.second));			
 		}
 	}
 	for(auto change: changeCopy){
@@ -447,6 +520,7 @@ vector<pair<uint16_t, uint16_t>> RoutingProtocolImpl::updateNgbr(uint16_t nextHo
 	}
 
 	if(oldDistToNextHop != delay){
+		cout << "does not equal to dealy \n";
 		changedMinDist.push_back(pair<uint16_t, uint16_t>(nextHop, delay));
 		for(auto it: dvTbl){
 			unordered_map<uint16_t, TblEntry> path = it.second;
@@ -465,8 +539,23 @@ vector<pair<uint16_t, uint16_t>> RoutingProtocolImpl::updateNgbr(uint16_t nextHo
                                 	changedMinDist.push_back(pair<uint16_t, uint16_t>(it.first, newMinPair.second.cost));
 				}
 			}
+			if(it.first == nextHop){
+				linkCosts[nextHop] = pair<uint16_t, uint16_t>(port, delay);
+				portStatus[port] = pair<uint16_t, uint32_t>(nextHop, curTime);
+			}
 		}
 		dvTbl[nextHop][nextHop] = TblEntry(delay, curTime);
+	}
+	else{
+		//do we need update link cost
+	//	cout <<"equla to delay \n";
+	//	cout <<"curTime is " << curTime << "\n";
+		portStatus[port] = pair<uint16_t, uint32_t>(nextHop, curTime);
+	//	cout <<"print port  status after equal \n";
+	//	printPortStatus();
+		linkCosts[nextHop] = pair<uint16_t, uint16_t>(port, delay);
+		dvTbl[nextHop][nextHop].time = curTime;
+					
 	}
 	return changedMinDist;
 }
@@ -510,6 +599,9 @@ vector<pair<uint16_t, uint16_t>> RoutingProtocolImpl::updateNonNgbr(uint16_t src
 	if(minPath.second.cost != routingTbl[dest].second){
 		routingTbl[dest] = pair<uint16_t, uint16_t>(minPath.first, minPath.second.cost);
         	changedMinDist.push_back(pair<uint16_t, uint16_t>(dest, minPath.second.cost));	
+	}
+	else{
+		dvTbl[dest][src].time = curTime;
 	}
 	return changedMinDist;	
 //	for(auto pathsPair: dvTbl[dest]){
