@@ -2,8 +2,7 @@
 #define ROUTINGPROTOCOLIMPL_H
 
 #include "RoutingProtocol.h"
-#include <unordered_map>
-#include "TblEntry.h"
+#include "impl.h"
 
 class RoutingProtocolImpl : public RoutingProtocol {
   public:
@@ -40,44 +39,7 @@ class RoutingProtocolImpl : public RoutingProtocol {
     
  private:
     Node *sys; // To store Node object; used to access GSR9999 interface
-    unsigned short numOfPorts;
-    unsigned short routerId;
-    eProtocolType protocolType;
-   // void handleDataPkg();
-    void sendPing();
-    void sendPong(uint16_t src, uint32_t timeStamp, unsigned short port);
-    void handlePongPkg(void* pkg, unsigned short port);
-    void handlePingPkg(void* pkg, unsigned short port);
-    void printRoutingTbl();
-    void printDVTbl();
-    void linkCheck();
-    pair<uint16_t, uint16_t> getDistance(uint16_t dest);
-    std::pair<std::uint16_t, TblEntry> findMinPath(unordered_map<std::uint16_t, TblEntry> pathToDest);
-  //  vector<pair<uint16_t, uint16_t>> updateNgbr(uint16_t dest, uint16_t delay, uint16_t nextHop);
-    vector<pair<uint16_t, uint16_t>> updateNgbr(uint16_t nextHop, uint16_t delay, unsigned short port);
-    int pingEvent = 12;
-    int dvCheck = 11;
-    int linkCheckEvent = 13;
-    int entryCheckEvent = 14;
-    int updateEvent = 15;
-    void handleDataPkg(void* pkg);
-    void handleUpdateEvent();
-    std::unordered_map<unsigned short, pair<uint16_t, uint32_t>> portStatus;
-    std::unordered_map<uint16_t,std::pair<unsigned short, uint16_t>> linkCosts;
-    std::unordered_map<uint16_t,std::pair<uint16_t, uint16_t>> routingTbl;
-    std::unordered_map<uint16_t, std::unordered_map<uint16_t, TblEntry>> dvTbl;
-    void handleDVPkg(void* pkg, unsigned short port);
-    void printPortStatus();
-    void entryCheck();
-    void sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16_t dest, uint16_t port, bool isNew);
-    void sendUpdateToAll(vector<pair<uint16_t, uint16_t>> changes, bool isNew, uint16_t src);
-    vector<pair<uint16_t, uint16_t>> updateNonNgbr(uint16_t src, uint16_t dest, uint16_t delay);
-//     * Min Distance: Map(nodeId, Pair(nextNodeId, distance))
-//     *  * Port Status: Map(nodeId, Pair(portNumber, time))
-//     *   * Routing Table: Map(nodeId, Map(nextNodeId, DIstance))
-//    unordered_map*<uint16_t, pair*<uint16_t, uint32_t>> minDistances = new unordered_map<uint16_t, pair*<uint16_t, uint32_t>>();
-//    unordered_map<uint16_t, pair*<unsigned short, uint32_t>> portStatus = new unordered_map<uint16_t, pair*<unsigned short, uint32_t>>();
-//    unordered_map<uint16_t, unordered_map*<uint16_t, uint32_t>> routingTable = new unordered_map<uint16_t, unordered_map*<uint16_t, uint32_t>>();
+    Impl* trueImpl;
 };
 
 #endif
