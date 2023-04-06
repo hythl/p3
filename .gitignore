@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *
 
 !*.cc
@@ -6,3 +7,10 @@
 !Makefile
 !README.md
 !.gitignore
+=======
+*.out
+*.o
+Simulator
+# professor's test
+!simpletest* 
+>>>>>>> origin/dev_hl
