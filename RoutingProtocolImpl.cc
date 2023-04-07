@@ -26,7 +26,7 @@ void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_i
 	NeighborSniff();
 
 	sys->set_alarm(this, 1000, &(this->entryCheck)); // entry expiration check: runs every 1 second
-	sys->set_alarm((RoutingProtocol*)this, 10000, &(this->pingEvent)); // Trigger Ping
+//	sys->set_alarm((RoutingProtocol*)this, 10000, &(this->pingEvent)); // Trigger Ping
   	sys->set_alarm((RoutingProtocol*)this, 30000, &(this->update));    // update: runs every 30 seconds
 
   cout << "router " << router_id << " initialized, using DV" << endl;
@@ -37,17 +37,17 @@ void RoutingProtocolImpl::handle_alarm(void *data) {
   AlarmType at = *(AlarmType*)data;
   switch(at){
     case PING_ALARM:
-      cout << "Router " << routerId << "> link check alarm triggered, time:" << sys->time() << endl;
+ //     cout << "Router " << routerId << "> ping  triggered, time:" << sys->time() << endl;
       fflush(stdout);
       NeighborSniff();
       break;
     case ENTRY_CHECK:
-      cout << "Router " << routerId << "> entry check alarm triggered, time:" << sys->time() << endl;
+//      cout << "Router " << routerId << "> entry check alarm triggered, time:" << sys->time() << endl;
       fflush(stdout);
       handleEntryCheck();
       break;
     case UPDATE:
-      cout << "Router " << routerId << "> update alarm triggered, time:" << sys->time() << endl;
+  //    cout << "Router " << routerId << "> update alarm triggered, time:" << sys->time() << endl;
       fflush(stdout);
       handleUpdateEvent();
       break;
@@ -170,7 +170,7 @@ void RoutingProtocolImpl::handleDVPkg(void* pkg, unsigned short port){
 		cout<< "Update distance to node " << nodeId << " to cost " << cost << " from " << src << "\n";
 		//Node should not receive a distance to itself from ngbr
 		if(nodeId == routerId){
-			cout<< "This should not happen \n";
+//			cout<< "This should not happen \n";
 			continue;
 		}
 		else{
@@ -295,9 +295,10 @@ void RoutingProtocolImpl::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, u
 		cout<< "change is dest: " <<change.first <<" cost: " << change.second << "\n";
                 uint16_t nextHop = routingTbl[change.first].first;
 		//changed entry is the link with ngbr
-		if(change.first == dest){
-                        continue;
-                }
+		//if(change.first == dest){
+                //        continue;
+               // }
+
 		//poison reverse
                 if(nextHop == dest && change.first != dest){
 			changesPoisonRv.push_back(pair<uint16_t, uint16_t>(change.first, 0xffff));
