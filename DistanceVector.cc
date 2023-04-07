@@ -300,7 +300,7 @@ void DistanceVector::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16
 }
 
 void DistanceVector::printDVTbl(){
-	cout << "print DV Table on node " << routerId << "\n";
+	cout << "print DV Table on node " << routerID << "\n";
 	for(auto pairs: dvTbl){
 		unordered_map<uint16_t, TblEntry> paths = pairs.second;
 		for(auto path: paths){
@@ -312,7 +312,7 @@ void DistanceVector::printDVTbl(){
 }
 
 void DistanceVector::printRoutingTbl(){
-	cout << "print Routing Table on node " << routerId << "\n";
+	cout << "print Routing Table on node " << routerID << "\n";
 	for(auto pairs: routingTbl){
 		 cout<< "Dest: " << pairs.first << " " << "NextHop: " << pairs.second.first << " " <<"Cost: "<< pairs.second.second << "\n";
 	}

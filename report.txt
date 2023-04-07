@@ -45,8 +45,23 @@ time = 0.05 Event_Xmit_Pkt_On_Link (2,1) packet type is DV
 time = 0.06 Event_Recv_Pkt_On_Node 1 packet type is DV
 time = 0.06 Event_Recv_Pkt_On_Node 3 packet type is DV
 time = 0.06 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 40
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 20
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 0.06 Event_Xmit_Pkt_On_Link (3,1) packet type is DV
 time = 0.08 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 40
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 80
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 20
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 1 Event_Alarm on node 2
 time = 1 Event_Alarm on node 1
 time = 1 Event_Alarm on node 3
@@ -90,12 +105,40 @@ time = 10.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 10.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 10.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 10.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 40
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 80
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 10020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 10.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 50
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 10020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 10.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 10.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 10.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 10.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 60
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 10040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 10.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 10040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 80
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 10020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 11 Event_Alarm on node 2
 time = 11 Event_Alarm on node 3
 time = 11 Event_Alarm on node 1
@@ -140,11 +183,39 @@ time = 20.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 20.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 20.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 20.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 10040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 80
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 20020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 20.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 50
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 20020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 20.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 20.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 20.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 60
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 20040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 20.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 20040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 80
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 20020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 21 Event_Alarm on node 3
 time = 21 Event_Alarm on node 1
 time = 21 Event_Alarm on node 2
@@ -191,20 +262,76 @@ time = 30 Event_Xmit_Pkt_On_Link (3,1) packet type is DV
 time = 30 Event_Xmit_Pkt_On_Link (2,1) packet type is DV
 time = 30.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 30.01 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 30010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 20040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 80
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 20020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 30.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 30.01 Event_Recv_Pkt_On_Node 2 packet type is DV
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 30010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 20020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 30.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 time = 30.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 30.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 30010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 20040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 30020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 20020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 30.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 30010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 30020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 30.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 30010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 20040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 30020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 30020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 30.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 30.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 30020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 20040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 30.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 30.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 30.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 30.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 30020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 30040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 30.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 30010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 30040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 30020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 30020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 31 Event_Alarm on node 2
 time = 31 Event_Alarm on node 3
 time = 31 Event_Alarm on node 1
@@ -249,11 +376,39 @@ time = 40.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 40.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 40.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 40.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 30010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 30040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 30020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 40020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 40.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 30010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 40020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 40.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 40.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 40.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 30010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 40040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 30020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 40020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 40.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 30020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 40040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 41 Event_Alarm on node 1
 time = 41 Event_Alarm on node 2
 time = 41 Event_Alarm on node 3
@@ -298,11 +453,39 @@ time = 50.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 50.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 50.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 50.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 30010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 50020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 50.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 30010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 40040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 30020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 50020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 50.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 50.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 50.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 30020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 50040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 50.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 30010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 50040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 30020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 50020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 51 Event_Alarm on node 3
 time = 51 Event_Alarm on node 1
 time = 51 Event_Alarm on node 2
@@ -349,20 +532,76 @@ time = 60 Event_Xmit_Pkt_On_Link (3,1) packet type is PING
 time = 60 Event_Xmit_Pkt_On_Link (2,1) packet type is DV
 time = 60.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 60.01 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 50040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 30020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 50020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 60.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 60.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 time = 60.01 Event_Recv_Pkt_On_Node 2 packet type is DV
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 60010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 50020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 60.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 60.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 60.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 60010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 60020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 60.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 50040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 30020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 60020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 60.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 60.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 60.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 60020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 50040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 60.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 60.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 50040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 60020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 60020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 60.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 60020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 60040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 60.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 60040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 60020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 60020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 61 Event_Alarm on node 2
 time = 61 Event_Alarm on node 1
 time = 61 Event_Alarm on node 3
@@ -407,11 +646,39 @@ time = 70.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 70.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 70.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 70.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 60040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 60020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 70020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 70.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 60010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 70020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 70.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 70.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 70.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 70040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 60020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 70020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 70.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 60020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 70040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 71 Event_Alarm on node 1
 time = 71 Event_Alarm on node 3
 time = 71 Event_Alarm on node 2
@@ -455,12 +722,40 @@ time = 80.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 80.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 80.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 80.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 70040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 60020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 80020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 80.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 60010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 80020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 80.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 80.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 80.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 80.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 60020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 80040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 80.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 60010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 80040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 60020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 80020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 81 Event_Alarm on node 1
 time = 81 Event_Alarm on node 2
 time = 81 Event_Alarm on node 3
@@ -508,19 +803,75 @@ time = 90 Event_Xmit_Pkt_On_Link (2,1) packet type is DV
 time = 90.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 90.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 time = 90.01 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 90010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 80040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 60020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 80020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 90.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 90.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 90.01 Event_Recv_Pkt_On_Node 2 packet type is DV
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 90010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 80020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 90.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 90.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 90010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 80040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 90020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 80020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 90.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 90010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 90020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 90.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 90010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 80040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 90020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 90020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 90.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 90.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 90.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 90020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 80040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 90.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 90.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 90010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 90040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 90020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 90020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 90.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 90020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 90040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 91 Event_Alarm on node 3
 time = 91 Event_Alarm on node 2
 time = 91 Event_Alarm on node 1
@@ -567,12 +918,40 @@ time = 100.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 100.01 Event_Recv_Pkt_On_Node 2 packet type is DATA
 time = 100.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 100.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 90010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 90040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 90020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 100020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 100.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 90010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 100020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 100.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 100.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 100.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 100.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 90010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 100040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 90020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 100020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 100.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 90020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 100040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 101 Event_Alarm on node 1
 time = 101 Event_Alarm on node 3
 time = 101 Event_Alarm on node 2
@@ -616,12 +995,40 @@ time = 110.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 110.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 110.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 110.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 90010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 100040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 90020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 110020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 110.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 90010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 110020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 110.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 110.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 110.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 110.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 90010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 110040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 90020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 110020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 110.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 90020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 110040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 111 Event_Alarm on node 1
 time = 111 Event_Alarm on node 3
 time = 111 Event_Alarm on node 2
@@ -667,21 +1074,77 @@ time = 120 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 time = 120 Event_Xmit_Pkt_On_Link (1,3) packet type is PING
 time = 120 Event_Xmit_Pkt_On_Link (1,2) packet type is DV
 time = 120.01 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 120010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 110040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 90020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 110020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 120.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 time = 120.01 Event_Recv_Pkt_On_Node 2 packet type is DV
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 120010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 110020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 120.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 120.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 120.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 120.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 120.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 120020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 110040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 120.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 120010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 110040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 90020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 120020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 120.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 120010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 120020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 120.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 120.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 120.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 120010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 110040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 120020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 120020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 120.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 120.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 120010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 120040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 120020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 120020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 120.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 120020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 120040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 121 Event_Alarm on node 1
 time = 121 Event_Alarm on node 3
 time = 121 Event_Alarm on node 2
@@ -728,12 +1191,40 @@ time = 130.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 130.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 130.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 130.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 120010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 120040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 120020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 130020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 130.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 120010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 130020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 130.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 130.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 130.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 130.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 120020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 130040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 130.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 120010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 130040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 120020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 130020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 131 Event_Alarm on node 1
 time = 131 Event_Alarm on node 3
 time = 131 Event_Alarm on node 2
@@ -778,11 +1269,39 @@ time = 140.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 140.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 140.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 140.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 120010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 140020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 140.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 120010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 130040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 120020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 140020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 140.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 140.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 140.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 120020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 140040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 140.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 120010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 140040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 120020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 140020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 141 Event_Alarm on node 1
 time = 141 Event_Alarm on node 2
 time = 141 Event_Alarm on node 3
@@ -832,14 +1351,50 @@ time = 150 Event_Xmit_Pkt_On_Link (1,3) packet type is PING
 time = 150 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 Packet lost
 time = 150.01 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 140040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 120020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 140020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 150.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 140040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 150020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 140020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 150.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 150.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 150.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 150020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 140040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 150.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 150.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 150.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 150040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 150020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 140020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 150.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 150020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 150040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 151 Event_Alarm on node 1
 time = 151 Event_Alarm on node 3
 time = 151 Event_Alarm on node 2
@@ -856,12 +1411,40 @@ time = 155 Event_Alarm on node 1
 time = 155 Event_Alarm on node 3
 time = 155 Event_Alarm on node 2
 time = 156 Event_Alarm on node 1
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 150040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 150020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 156 Event_Alarm on node 3
 time = 156 Event_Alarm on node 2
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 65535 timestamp: 156000
+Dest: 1 NextHop: 1 Cost: 65535 timestamp: 156000
+print Routing Table on node 2
+Dest: 3 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 65535 Cost: 65535
 time = 156 Event_Xmit_Pkt_On_Link (1,3) packet type is DV
 time = 156.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 156020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 150040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 156.02 Event_Xmit_Pkt_On_Link (3,1) packet type is DV
 time = 156.04 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 150040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 156040
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 157 Event_Alarm on node 1
 time = 157 Event_Alarm on node 2
 time = 157 Event_Alarm on node 3
@@ -888,7 +1471,21 @@ time = 160.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 160.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 160.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 160.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 156020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 160040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 160.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 160040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 156040
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 161 Event_Alarm on node 1
 time = 161 Event_Alarm on node 2
 time = 161 Event_Alarm on node 3
@@ -933,7 +1530,21 @@ time = 170.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 170.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 170.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 170.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 156020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 170040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 170.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 170040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 156040
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 171 Event_Alarm on node 1
 time = 171 Event_Alarm on node 2
 time = 171 Event_Alarm on node 3
@@ -980,12 +1591,40 @@ time = 180 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 Packet lost
 time = 180.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 180.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 170040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 180020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 180.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 180.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 180020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 170040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 180.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 180.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 180.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 180040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 180020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 180.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 180020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 180040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 181 Event_Alarm on node 3
 time = 181 Event_Alarm on node 2
 time = 181 Event_Alarm on node 1
@@ -1030,7 +1669,21 @@ time = 190.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 190.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 190.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 190.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 190040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 180020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 190.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 180020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 190040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 191 Event_Alarm on node 3
 time = 191 Event_Alarm on node 2
 time = 191 Event_Alarm on node 1
@@ -1075,7 +1728,21 @@ time = 200.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 200.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 200.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 200.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 180020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 200040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 200.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 200040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 180020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 201 Event_Alarm on node 2
 time = 201 Event_Alarm on node 1
 time = 201 Event_Alarm on node 3
@@ -1122,12 +1789,40 @@ time = 210 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 Packet lost
 time = 210.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 210.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 200040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 210020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 210.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 210.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 210020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 200040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 210.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 210.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 210.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 210040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 210020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 210.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 210020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 210040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 211 Event_Alarm on node 3
 time = 211 Event_Alarm on node 1
 time = 211 Event_Alarm on node 2
@@ -1172,7 +1867,21 @@ time = 220.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 220.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 220.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 220.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 220040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 210020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 220.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 210020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 220040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 221 Event_Alarm on node 3
 time = 221 Event_Alarm on node 1
 time = 221 Event_Alarm on node 2
@@ -1217,7 +1926,21 @@ time = 230.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 230.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 230.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 230.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 210020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 230040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 230.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 230040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 210020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 231 Event_Alarm on node 1
 time = 231 Event_Alarm on node 2
 time = 231 Event_Alarm on node 3
@@ -1264,12 +1987,40 @@ Packet lost
 time = 240 Event_Xmit_Pkt_On_Link (1,3) packet type is DV
 time = 240.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 240.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 230040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 240020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 240.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 240.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 240020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 230040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 240.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 240.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 240.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 240040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 240020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 240.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 240020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 240040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 241 Event_Alarm on node 3
 time = 241 Event_Alarm on node 2
 time = 241 Event_Alarm on node 1
@@ -1317,7 +2068,21 @@ time = 250.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 250.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 250.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 250.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 250040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 240020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 250.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 240020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 250040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 251 Event_Alarm on node 3
 time = 251 Event_Alarm on node 1
 time = 251 Event_Alarm on node 2
@@ -1362,7 +2127,21 @@ time = 260.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 260.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 260.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 260.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 240020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 260040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 260.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 260040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 240020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 261 Event_Alarm on node 3
 time = 261 Event_Alarm on node 2
 time = 261 Event_Alarm on node 1
@@ -1408,13 +2187,41 @@ time = 270 Event_Xmit_Pkt_On_Link (1,2) packet type is PING
 Packet lost
 time = 270 Event_Xmit_Pkt_On_Link (1,3) packet type is PING
 time = 270.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 260040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 270020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 270.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 270020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 260040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 270.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 270.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 270.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 270.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 270.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 270020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 270040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 270.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 270040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 270020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 271 Event_Alarm on node 3
 time = 271 Event_Alarm on node 1
 time = 271 Event_Alarm on node 2
@@ -1459,7 +2266,21 @@ time = 280.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 280.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 280.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 280.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 280040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 270020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 280.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 270020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 280040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 281 Event_Alarm on node 3
 time = 281 Event_Alarm on node 2
 time = 281 Event_Alarm on node 1
@@ -1504,7 +2325,21 @@ time = 290.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 290.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 290.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 290.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 270020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 290040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 290.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 290040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 270020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 291 Event_Alarm on node 3
 time = 291 Event_Alarm on node 1
 time = 291 Event_Alarm on node 2
@@ -1552,7 +2387,21 @@ time = 300 Event_Xmit_Pkt_On_Link (2,1) packet type is PING
 time = 300.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 300.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 300.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 290040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 300020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 300.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 300020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 290040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 300.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 300.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 300.02 Event_Recv_Pkt_On_Node 1 packet type is PING
@@ -1561,7 +2410,21 @@ time = 300.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
 time = 300.02 Event_Xmit_Pkt_On_Link (2,1) packet type is DV
 time = 300.03 Event_Recv_Pkt_On_Node 1 packet type is DV
 time = 300.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 150010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 300040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 300020
+Dest: 2 NextHop: 2 Cost: 65535 timestamp: 156000
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 65535 Cost: 65535
 time = 300.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 300020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 300040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 301 Event_Alarm on node 2
 time = 301 Event_Alarm on node 1
 time = 301 Event_Alarm on node 3
@@ -1606,19 +2469,67 @@ time = 310.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 310.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 310.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
 time = 310.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 65535 timestamp: 156000
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 310020
+print Routing Table on node 2
+Dest: 3 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 20
 time = 310.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 310.02 Event_Xmit_Pkt_On_Link (1,2) packet type is DV
 time = 310.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 310.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 310.02 Event_Xmit_Pkt_On_Link (1,3) packet type is DV
 time = 310.03 Event_Recv_Pkt_On_Node 2 packet type is DV
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 310030
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 310020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 310.03 Event_Xmit_Pkt_On_Link (2,1) packet type is DV
 time = 310.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 65535 timestamp: 300020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 310040
+print Routing Table on node 3
+Dest: 2 NextHop: 65535 Cost: 65535
+Dest: 1 NextHop: 1 Cost: 40
 time = 310.04 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 310040
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 310040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 310.04 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 310040
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 300040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 300020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 310020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 310.04 Event_Xmit_Pkt_On_Link (3,1) packet type is DV
 time = 310.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 310040
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 310040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 300020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 310020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 310.06 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 310040
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 310040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 310060
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 310020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 311 Event_Alarm on node 3
 time = 311 Event_Alarm on node 2
 time = 311 Event_Alarm on node 1
@@ -1662,12 +2573,40 @@ time = 320.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 320.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 320.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 320.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 310040
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 310040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 310060
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 320020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 320.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 310030
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 320020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 320.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 320.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 320.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 320.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 310040
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 320040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 310060
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 320020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 320.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 310040
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 320040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 321 Event_Alarm on node 3
 time = 321 Event_Alarm on node 1
 time = 321 Event_Alarm on node 2
@@ -1715,19 +2654,75 @@ time = 330 Event_Xmit_Pkt_On_Link (3,1) packet type is DV
 time = 330.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 330.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 time = 330.01 Event_Recv_Pkt_On_Node 2 packet type is DV
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 330010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 320020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 330.01 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 330010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 320040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 310060
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 320020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 330.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 330.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 330.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 330010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 320040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 330020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 320020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 330.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 330.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 330010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 320040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 330020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 330020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 330.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 330.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 330.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 330.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 330020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 320040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 330.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 330010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 330020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 330.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 330010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 330040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 330020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 330020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 330.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 330020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 330040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 331 Event_Alarm on node 2
 time = 331 Event_Alarm on node 1
 time = 331 Event_Alarm on node 3
@@ -1771,12 +2766,40 @@ time = 340.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 340.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 340.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 340.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 330010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 340020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 340.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 330010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 330040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 330020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 340020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 340.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 340.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 340.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 340.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 330020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 340040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 340.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 330010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 340040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 330020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 340020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 341 Event_Alarm on node 3
 time = 341 Event_Alarm on node 2
 time = 341 Event_Alarm on node 1
@@ -1822,13 +2845,41 @@ time = 350.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 350.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 350.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 350.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 330010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 340040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 330020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 350020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 350.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 330010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 350020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 350.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 350.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 350.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 350.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 350.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 330020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 350040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 350.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 330010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 350040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 330020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 350020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 351 Event_Alarm on node 1
 time = 351 Event_Alarm on node 3
 time = 351 Event_Alarm on node 2
@@ -1875,20 +2926,76 @@ time = 360 Event_Xmit_Pkt_On_Link (1,2) packet type is DV
 time = 360 Event_Xmit_Pkt_On_Link (1,3) packet type is DV
 time = 360.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 time = 360.01 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 360010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 350040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 330020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 350020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 360.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 360.01 Event_Recv_Pkt_On_Node 2 packet type is DV
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 360010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 350020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 360.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 360.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 360.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 360020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 350040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 360.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 360.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 360010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 360020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 360.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 360.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 360010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 350040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 360020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 350020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 360.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 360.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 360.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 360010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 350040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 360020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 360020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 360.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 360020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 360040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 360.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 360010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 360040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 360020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 360020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 361 Event_Alarm on node 2
 time = 361 Event_Alarm on node 1
 time = 361 Event_Alarm on node 3
@@ -1932,12 +3039,40 @@ time = 370.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 370.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 370.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 370.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 360010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 360040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 360020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 370020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 370.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 360010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 370020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 370.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 370.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 370.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 370.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 360020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 370040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 370.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 360010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 370040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 360020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 370020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 371 Event_Alarm on node 2
 time = 371 Event_Alarm on node 1
 time = 371 Event_Alarm on node 3
@@ -1981,12 +3116,40 @@ time = 380.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 380.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 380.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 380.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 360010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 370040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 360020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 380020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 380.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 360010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 380020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 380.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 380.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 380.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 380.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 360020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 380040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 380.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 360010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 380040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 360020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 380020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 381 Event_Alarm on node 2
 time = 381 Event_Alarm on node 1
 time = 381 Event_Alarm on node 3
@@ -2032,21 +3195,77 @@ time = 390 Event_Alarm on node 3
 time = 390 Event_Xmit_Pkt_On_Link (3,1) packet type is PING
 time = 390 Event_Xmit_Pkt_On_Link (3,1) packet type is DV
 time = 390.01 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 390010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 380040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 360020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 380020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 390.01 Event_Recv_Pkt_On_Node 2 packet type is PING
 time = 390.01 Event_Recv_Pkt_On_Node 2 packet type is DV
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 390010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 380020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 390.01 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 390.01 Event_Xmit_Pkt_On_Link (2,1) packet type is PONG
 time = 390.01 Event_Xmit_Pkt_On_Link (1,2) packet type is PONG
 time = 390.02 Event_Recv_Pkt_On_Node 1 packet type is DV
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 390010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 380040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 390020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 380020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 390.02 Event_Recv_Pkt_On_Node 3 packet type is DV
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 390020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 380040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 390.02 Event_Recv_Pkt_On_Node 2 packet type is PONG
+print DV Table on node 2
+Dest: 3 NextHop: 1 Cost: 60 timestamp: 390010
+Dest: 1 NextHop: 1 Cost: 20 timestamp: 390020
+print Routing Table on node 2
+Dest: 3 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 20
 time = 390.02 Event_Recv_Pkt_On_Node 1 packet type is PING
 time = 390.02 Event_Xmit_Pkt_On_Link (1,3) packet type is PONG
 time = 390.02 Event_Recv_Pkt_On_Node 3 packet type is PING
 time = 390.02 Event_Xmit_Pkt_On_Link (3,1) packet type is PONG
 time = 390.02 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 390010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 380040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 390020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 390020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 390.04 Event_Recv_Pkt_On_Node 3 packet type is PONG
+print DV Table on node 3
+Dest: 2 NextHop: 1 Cost: 60 timestamp: 390020
+Dest: 1 NextHop: 1 Cost: 40 timestamp: 390040
+print Routing Table on node 3
+Dest: 2 NextHop: 1 Cost: 60
+Dest: 1 NextHop: 1 Cost: 40
 time = 390.04 Event_Recv_Pkt_On_Node 1 packet type is PONG
+print DV Table on node 1
+Dest: 3 NextHop: 2 Cost: 65535 timestamp: 390010
+Dest: 3 NextHop: 3 Cost: 40 timestamp: 390040
+Dest: 2 NextHop: 3 Cost: 65535 timestamp: 390020
+Dest: 2 NextHop: 2 Cost: 20 timestamp: 390020
+print Routing Table on node 1
+Dest: 3 NextHop: 3 Cost: 40
+Dest: 2 NextHop: 2 Cost: 20
 time = 391 Event_Alarm on node 2
 time = 391 Event_Alarm on node 1
 time = 391 Event_Alarm on node 3
