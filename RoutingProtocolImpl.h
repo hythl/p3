@@ -2,7 +2,7 @@
 #define ROUTINGPROTOCOLIMPL_H
 
 #include "RoutingProtocol.h"
-#include "impl.h"
+#include "Impl.h"
 
 class RoutingProtocolImpl : public RoutingProtocol {
   public:

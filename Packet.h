@@ -2,19 +2,25 @@
 #define ROUTING_PROTOCOL_PACKET_H
 
 #include <arpa/inet.h>
+#include <string.h>
+#include <iostream>
 #include "global.h"
 
 class Packet {
   public:
-    uint8_t type;
+    unsigned char type;
     uint16_t src;
     uint16_t dst;
     uint16_t size;
     void* payload;
     uint16_t payloadSize;
-    void* buffer;
+    char* buffer;
 
-    Packet() {};
+    Packet(){
+      payload = NULL;
+      buffer = NULL;
+    };
+    
     Packet(uint16_t src, uint16_t dst) {
       this->src = src;
       this->dst = dst;
@@ -26,81 +32,84 @@ class Packet {
       free(payload);
     };
 
-    void setType(ePacketType type) { this->type = (uint8_t)type;}
+    void setType(ePacketType type) { this->type = (unsigned char)type;}
     void setSrc(uint16_t src) { this->src = src;}
     void setDst(uint16_t dst) { this->dst = dst;}
     void setSize(uint16_t size) { this->size = size;}
 
     void* serialize() {
-      uint8_t nType = htons(type);
-      uint16_t nSrc = htonl(src);
-      uint16_t nDst = htonl(dst);
-      uint16_t nSize = htonl(size);
+      size = 8 + payloadSize;
+      cout << "Packet to be serialized: src = " << src << " dst = " << dst << " size = " << size << " type = " << uint16_t(type)<< endl;
+      uint16_t nSize = htons(size);
+      uint16_t nSrc = htons(src);
+      uint16_t nDst = htons(dst);
 
       // PACKET FORMAT
       // type (1 byte) + Reserved (1 byte) + size(2 bytes) + src (2 bytes) + dst (2 bytes) + payload
-      size = 8 + payloadSize;
-      void* buffer = calloc(size);
-      memcpy(buffer, &nType, 1);
-      memcpy(buffer + 2, &nSize, 2);
-      memcpy(buffer + 4, &nSrc, 2);
-      memcpy(buffer + 6, &nDst, 2);
+      buffer = (char*)malloc(size);
+      *buffer = type;
+      memcpy(buffer + 2, (void*)&nSize, sizeof(uint16_t));
+      memcpy(buffer + 4, (void*)&nSrc, sizeof(uint16_t));
+      memcpy(buffer + 6, (void*)&nDst, sizeof(uint16_t));
       memcpy(buffer + 8, payload, payloadSize);
       return buffer;
     }
 
     void deserialize(void* bufferIn) {
-      buffer = bufferIn;
-      memcpy(&type, buffer, 1);
-      memcpy(&size, buffer + 2, 2);
-      memcpy(&src, buffer + 4, 2);
-      memcpy(&dst, buffer + 6, 2);
-      type = ntohs(type);
-      size = ntohl(size);
-      src = ntohl(src);
-      dst = ntohl(dst);
+      buffer = (char*)bufferIn;
+      memcpy(&type, buffer, sizeof(uint8_t));
+      memcpy(&size, buffer + 2, sizeof(uint16_t));
+      memcpy(&src, buffer + 4, sizeof(uint16_t));
+      memcpy(&dst, buffer + 6, sizeof(uint16_t));
+
+      size = ntohs(size);
+      src = ntohs(src);
+      dst = ntohs(dst);
       payloadSize = size - 8;
-      payload = payload == NULL ? malloc(payloadSize) : realloc(payload, payloadSize);
+      if (payload != NULL)
+        free(payload);
+      payload = malloc(payloadSize);
       memcpy(payload, buffer + 8, payloadSize);
+    }
+
+    Packet clone() {
+      Packet p;
+      p.type = type;
+      p.src = src;
+      p.dst = dst;
+      p.size = size;
+      p.payloadSize = payloadSize;
+      p.payload = malloc(payloadSize);
+      memcpy(p.payload, payload, payloadSize);
+      return p;
     }
 
     void destory() {
       free(buffer);
     }
-}
-
-class PongPacket : public Packet {
-  public:
-    PongPacket(uint16_t src, uint16_t dst) : Packet(src, dst) {
-      type = PONG;
-      payloadSize = 4;
-      payload = malloc(payloadSize);
-      memcpy(payload, &timeStamp, payloadSize);
-    };
-
-    ~PongPacket();
-}
+};
 
 class PingPacket : public Packet {
   public:
-    PingPacket(uint32_t src, unsigned int timeStamp) : Packet(src, 0) {
+    PingPacket(uint16_t src, unsigned int timeStamp) : Packet(src, 0) {
       type = PING;
-      payloadSize = 4;
+      this->src = src;
+      payloadSize = sizeof(unsigned int);
       payload = malloc(payloadSize);
       memcpy(payload, &timeStamp, payloadSize);
     };
+};
 
-    ~PingPacket();
+class PongPacket : public Packet {
+  public:
+    PongPacket(uint16_t src, uint16_t dst, void* content, uint16_t contentSize) : Packet(src, 0) {
+      type = PONG;
+      this->src = src;
+      this->dst = dst;
+      payloadSize = contentSize;
+      payload = malloc(payloadSize);
+      memcpy(payload, content, payloadSize);
+    };
+};
 
-    void* toPongPacket(uint32_t src) {
-      // buffer must be valid
-      u
-      memcpy(buffer, &type, 1);
-      memcpy(buffer + 4, &src, 2);
-      PongPacket* pong = new PongPacket(src, dst);
-      pong->payload = payload;
-      pong->payloadSize = payloadSize;
-      return pong;
-    }
-    
-}
+#endif //ROUTING_PROTOCOL_PACKET_H

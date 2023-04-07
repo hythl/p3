@@ -15,7 +15,7 @@ RoutingProtocolImpl::RoutingProtocolImpl(Node *n) : RoutingProtocol(n) {
 RoutingProtocolImpl::~RoutingProtocolImpl() {}
 
 void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_id, eProtocolType protocol_type) {
-  trueImpl = protocol_type == P_DV ? (Impl*)new DistanceVector(sys) : (Impl*)new LinkState(sys);
+  trueImpl = protocol_type == P_DV ? (Impl*)new DistanceVector(sys, this) : (Impl*)new LinkState(sys, this);
   trueImpl->init(num_ports, router_id, protocol_type);
 }
 
