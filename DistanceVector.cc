@@ -158,9 +158,9 @@ void DistanceVector::handleDVPkg(void* pkg, unsigned short port){
 	}
 
 	// cout<< "The Routing table on node " << routerID << " is " << "\n";
-	printRoutingTbl();
+	//printRoutingTbl();
 	// cout<< "The DV table on node" << routerID << " is " << "\n";
-	printDVTbl();
+	//printDVTbl();
 	
 	vector<pair<uint16_t, uint16_t>> realChanges;
 	for(auto updatesEach: updatesForAll){
@@ -226,9 +226,9 @@ void DistanceVector::handlePongPkg(void* pkg, unsigned short port){
 
 	vector<pair<uint16_t, uint16_t>> changedRouting = updateNgbr(src, delay);
 	// cout<< "DV table update to \n";
-	printDVTbl();
+	//printDVTbl();
 	// cout<<"Routing Table update to \n";
-	printRoutingTbl();
+	//printRoutingTbl();
 	bool isNew = false;
 	//find new ngbr, dump all info I know
 	if(linkInfo.count(src) == 0){
@@ -300,22 +300,23 @@ void DistanceVector::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16
 }
 
 void DistanceVector::printDVTbl(){
-/*
+
 	for(auto pairs: dvTbl){
 		unordered_map<uint16_t, TblEntry> paths = pairs.second;
 		for(auto path: paths){
-			// cout<<pairs.first << " " << path.first << " " << path.second.cost <<" " << path.second.time << "\n";
+			 cout<<"Dest: " << pairs.first << " " << "NextHop: " << path.first << " " << "Cost: " 
+			 << path.second.cost <<" " << "timestamp: " << path.second.time << "\n";
 		}
 	}
-*/
+
 }
 
 void DistanceVector::printRoutingTbl(){
-/*
+
 	for(auto pairs: routingTbl){
-		// cout<< pairs.first << " " << pairs.second.first << " " << pairs.second.second << "\n";
+		 cout<< "Dest: " << pairs.first << " " << "NextHop: " << pairs.second.first << " " <<"Cost: "<< pairs.second.second << "\n";
 	}
-*/
+
 }
 
 
@@ -366,6 +367,8 @@ vector<pair<uint16_t, uint16_t>> DistanceVector::updateNgbr(uint16_t nextHop, ui
 		linkInfo.erase(nextHop);
 	}
 	dvTbl[nextHop][nextHop] = TblEntry(delay, curTime);
+	printDVTbl();
+	printRoutingTbl();
 	return changedMinDist;
 }
 
@@ -405,6 +408,8 @@ vector<pair<uint16_t, uint16_t>> DistanceVector::updateNonNgbr(uint16_t src, uin
 	else{
 		dvTbl[dest][src].time = curTime;
 	}
+	printDVTbl();
+	printRoutingTbl();
 	return changedMinDist;	
 }
 
