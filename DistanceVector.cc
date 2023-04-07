@@ -13,79 +13,74 @@ void DistanceVector::init(unsigned short num_ports, unsigned short router_id, eP
 
   this->NeighborSniff();
 
-  sys->set_alarm(this->proxy, 1000, &linkCheckEvent);  // check for new neighbors every 1 second
-  sys->set_alarm(this->proxy, 1000, &entryCheckEvent);  // check for expired entries every 1 second
-  sys->set_alarm(this->proxy, 10000, &ngbrSniffEvent);  // check for new neighbors every 10 seconds
-  sys->set_alarm(this->proxy, 30000, &updateEvent);     // send update every 30 seconds
+  //sys->set_alarm(this->proxy, 1000, &linkCheckEvent);  // check for new neighbors every 1 second
+  sys->set_alarm(this->proxy, 1000, &entryCheck);  // check for expired entries every 1 second
+  //sys->set_alarm(this->proxy, 10000, &ngbrSniffEvent);  // check for new neighbors every 10 seconds
+  sys->set_alarm(this->proxy, 30000, &update);     // send update every 30 seconds
 
   this->log("Initialized, %d ports\n", num_ports);
 }
 
 void DistanceVector::handle_alarm(void *data) {
-  AlarmType* alarm = (AlarmType*) data;
-  switch (*alarm) {
-    case LINK_CHECK:
-      this->log("Link Check triggered\n");
-      this->linkCheck();
-      sys->set_alarm(this->proxy, 1000, &linkCheckEvent);
+  AlarmType at = *(AlarmType*)data;
+  switch(at){
+    case PING_ALARM:
+      fflush(stdout);
+      NeighborSniff();
       break;
     case ENTRY_CHECK:
-      this->log("Entry Check triggered\n");
-      // TODO
-      // this->entryCheck();
-      sys->set_alarm(this->proxy, 1000, &entryCheckEvent);
-      break;
-    case NGBR_SNIFF:
-      this->log("Neighbor Sniff triggered\n");
-      this->NeighborSniff();
-      sys->set_alarm(this->proxy, 10000, &ngbrSniffEvent);
+      fflush(stdout);
+      handleEntryCheck();
       break;
     case UPDATE:
-      this->log("Update triggered\n");
-      // TODO
-      sys->set_alarm(this->proxy, 30000, &updateEvent);
+      fflush(stdout);
+      handleUpdateEvent();
       break;
     default:
       break;
   }
 }
 
-void DistanceVector::recv(unsigned short port, void *packetIn, unsigned short size) {
-  Packet* packet = new Packet();
-  packet->deserialize(packetIn);
-  this->log("Received packet from port %d, type: %d, src:%d, dst:%d, size:%d\n", port, packet->type, packet->src, packet->dst, packet->size);
-  switch (packet->type) {
-    case PING:
-      this->handlePingPkt(packet, port);
-      break;
-    case PONG:
-      this->handlePongPkt(packet, port);
-      break;
-    case DV:
-      // this->handleDVPkg(packet, port);
-      break;
-    case DATA:
-      this->handleDataPkt(packet, port);
-      break;
-    default:
-      break;
-  }
+void DistanceVector::recv(unsigned short port, void *packet, unsigned short size) {
+  	if(port == DATAPORT){
+		// cout<<"Receive data pkg \n";
+		handleDataPkg(packet);
+		return;
+	}
+	uint8_t* packetTypePkg = (uint8_t*) packet;
+	uint8_t packetType =  *packetTypePkg;
+	switch(packetType){
+    		case PING:
+			handlePingPkg(packet, port);
+			break;
+		case PONG:
+			handlePongPkg(packet, port);
+			break;
+		case DV:
+			handleDVPkg(packet, port);
+			break;
+		case DATA:
+			// cout <<"Receive data packet" << "\n";
+			handleDataPkg(packet);			
+			break;
+    		default:
+      			break;
+  	}
 }
 
 void DistanceVector::handleUpdateEvent(){
 	vector<pair<uint16_t, uint16_t>> datas;
+	//Dump all of the info to the new ngbr
 	for(auto routingEntry: routingTbl){
-		if(routingEntry.second.second == 0xffff){
-			continue;
-		}
 		datas.push_back(pair<uint16_t, uint16_t>(routingEntry.first, routingEntry.second.second));
 	}
 	sendUpdateToAll(datas, false, routerID);
-	sys->set_alarm((RoutingProtocol*)this, 30000, &(this->updateEvent));	
+	sys->set_alarm(this->proxy, 30000, &(this->update));	
 }
 
-void DistanceVector::entryCheck(){
-	uint32_t curTime = sys->time();
+void DistanceVector::handleEntryCheck(){
+uint32_t curTime = sys->time();
+	vector<vector<pair<uint16_t, uint16_t>>> updatesForAll;
 	for(auto tblPair: dvTbl){
 		unordered_map<uint16_t, TblEntry> paths= tblPair.second;
 		uint16_t dest = tblPair.first;
@@ -93,66 +88,47 @@ void DistanceVector::entryCheck(){
 			uint32_t lastSeen = path.second.time;
 			uint16_t nextHop = path.first;
 			uint16_t cost = path.second.cost;
-			if(curTime - lastSeen > 45000 && cost != 0xffff){
-				cout<<"path from " << routerID << " to " << dest << " through " << nextHop << " expires \n";
-				if(nextHop != dest){
-					sendUpdateToAll(updateNonNgbr(nextHop, dest, 0xffff), false, nextHop);
-				}
+			//if the direct expires and the path exist, remove the entry
+			if(curTime - lastSeen > 15000 && dest == nextHop && cost != 0xffff){
+                                updatesForAll.push_back(updateNgbr(nextHop, 0xffff));
+                        }
+			// if the entry expires and the path exist, remove the entry
+			else if(curTime - lastSeen > 45000 && cost != 0xffff){
+				// cout<<"path from " << routerID << " to " << dest << " through " << nextHop << " expires \n";
+				updatesForAll.push_back(updateNonNgbr(nextHop, dest, 0xffff));
 			}
+			
 		}		
 	}
-	sys->set_alarm((RoutingProtocol*)this, 1000, &(this->entryCheckEvent));			
-}
-
-
-void DistanceVector::linkCheck(){
-	uint32_t curTime = sys->time();
-	vector<pair<uint16_t, uint16_t>> changes;
-	cout<<"current time is " << curTime << "\n";
-	unordered_map<uint16_t, pair<uint16_t, uint32_t>> portStatusCopy;
-	for(auto portStatusPair: portStatus){
-		portStatusCopy[portStatusPair.first] = portStatusPair.second;
-	}
-	for(auto portStatusPair: portStatusCopy){
-		uint16_t src = portStatusPair.second.first;
-		uint16_t port = portStatusPair.first;
-		if(curTime - portStatusPair.second.second > 15000){
-			cout << "link from " << routerID << " to " << src << "curshed " << "last seen "
-			<< portStatusPair.second.second <<"\n";
-			changes = updateNgbr(src, 0xffff, port);
-			portStatus.erase(portStatusPair.first);
-			linkCosts.erase(src);
-			sendUpdateToAll(changes, false, src);						
-		}
-	}
-//	printPortStatus();	
-	sys->set_alarm((RoutingProtocol*)this, 1000, &(this->linkCheckEvent));			
-}
-
-void DistanceVector::printPortStatus(){
-	cout << "print port staus of node " <<  routerID << "\n";
-	for(auto portStatusEntry: portStatus){
-		cout << "port: " << portStatusEntry.first << " to Node: " << portStatusEntry.second.first
-		 << " timestap: "  << portStatusEntry.second.second << "\n";
-	}
+	// when multiple paths toward same destination failed, we only keep the newest change. 
+	vector<pair<uint16_t, uint16_t>> realChanges;
+	for(auto updatesEach: updatesForAll){
+                for(auto update: updatesEach){
+                        // cout<<"update is dest: " << update.first << " cost: " <<update.second <<"\n";
+                        // cout<<"routing table is " << update.first << "cost: " <<routingTbl[update.first].second << "\n";
+                        if(routingTbl[update.first].second == update.second){
+                                realChanges.push_back(update);
+                        }
+                }
+        }
+	sendUpdateToAll(realChanges, false, routerID);
+	sys->set_alarm(this->proxy, 1000, &(this->entryCheck));		
 }
 
 void DistanceVector::handleDataPkg(void *pkg){
 	uint16_t* temp = (uint16_t*) pkg;
-  uint16_t size = ntohs(*(temp + 1));
-  uint16_t dest = ntohs(*(temp + 3));
+  	uint16_t size = ntohs(*(temp + 1));
+  	uint16_t dest = ntohs(*(temp + 3));
 	if(dest != routerID){
 		if(routingTbl.count(dest) == 0 || routingTbl[dest].second == 0xffff){
-			cout << "drop packet since no path to destination found " << "\n";
+			// cout << "drop packet since no path to destination found " << "\n";
 			free(pkg);
 			return;
 		}
-		cout <<"dest for DATA pkt is " << dest << "\n";
-		unsigned short nextPort = linkCosts[routingTbl[dest].first].first; 		
+		unsigned short nextPort = linkInfo[routingTbl[dest].first]; 		
 		sys->send(nextPort, pkg, size);
 	}
 	else{
-		cout<<"data received at " << routerID << "\n";
 		free(pkg);
 		return;		
 	}
@@ -160,21 +136,9 @@ void DistanceVector::handleDataPkg(void *pkg){
 
 void DistanceVector::handleDVPkg(void* pkg, unsigned short port){
 	uint16_t* temp = (uint16_t*) pkg;
-        uint16_t pkgType = ntohs(*temp);
-        uint16_t size = ntohs(*(temp + 1));
-        uint16_t src = ntohs(*(temp + 2));
-	uint16_t dest = ntohs(*(temp + 3));
-	if(dest != routerID){
-		if(routingTbl.count(dest) == 0){
-			cout<<"can not find a path to " << dest << " on node " << routerID << "\n";
-			return;
-		}
-		unsigned short nextPort = linkCosts[routingTbl[dest].first].first;
-		sys->send(nextPort, pkg, size);
-		return;
-	}
-	cout<<"Receive DV  on node " << this->routerID << " with type "
-        << pkgType << " with size " << size <<" from " << src << "\n";
+  uint16_t size = ntohs(*(temp + 1));
+  uint16_t src = ntohs(*(temp + 2));
+	// cout<<"Receive DV  on node " << this->routerID << " with type " << pkgType << " with size " << size <<" from " << src << "\n";
 	temp = temp + 4;
 	vector<vector<pair<uint16_t, uint16_t>>> updatesForAll;
 	for(int i = 0; i < (size - 8) / 4; i++){
@@ -182,37 +146,33 @@ void DistanceVector::handleDVPkg(void* pkg, unsigned short port){
 		temp = temp + 1;
 		uint16_t cost = ntohs(*temp);
 		temp = temp + 1;
-		cout<< "Update distance to node " << nodeId << " to cost " << cost << " from " << src << "\n";
-		if(portStatus.count(port) == 0){
-			continue;
-		}
-		uint16_t nextHop = portStatus[port].first;
-		if(nodeId == routerID && nextHop == src){
-			updatesForAll.push_back(updateNgbr(src, cost, port));
-		}
-		else if(nodeId == routerID){
+		// cout<< "Update distance to node " << nodeId << " to cost " << cost << " from " << src << "\n";
+		//Node should not receive a distance to itself from ngbr
+		if(nodeId == routerID){
+//			// cout<< "This should not happen \n";
 			continue;
 		}
 		else{
 			updatesForAll.push_back(updateNonNgbr(src, nodeId, cost));
 		}
 	}
-	cout<< "The Routing table on node " << routerID << " is " << "\n";
+
+	// cout<< "The Routing table on node " << routerID << " is " << "\n";
 	printRoutingTbl();
-	cout<< "The DV table on node" << routerID << " is " << "\n";
+	// cout<< "The DV table on node" << routerID << " is " << "\n";
 	printDVTbl();
-	cout<<"The size of updateForAll is "<< updatesForAll.size() << "\n";
+	
 	vector<pair<uint16_t, uint16_t>> realChanges;
 	for(auto updatesEach: updatesForAll){
 		for(auto update: updatesEach){
-			cout<<"update is dest: " << update.first << " cost: " <<update.second <<"\n";
-			cout<<"routing table is " << update.first << "cost: " <<routingTbl[update.first].second << "\n";
+			// cout<<"update is dest: " << update.first << " cost: " <<update.second <<"\n";
+			// cout<<"routing table is " << update.first << "cost: " <<routingTbl[update.first].second << "\n";
 			if(routingTbl[update.first].second == update.second){
 				realChanges.push_back(update);
 			}
 		}
 	}
-	cout<<"real change size is " << realChanges.size() << "\n";
+	// cout<<"real change size is " << realChanges.size() << "\n";
 	if(realChanges.size() != 0){
 		sendUpdateToAll(realChanges, false, src);
 	}
@@ -221,16 +181,11 @@ void DistanceVector::handleDVPkg(void* pkg, unsigned short port){
 
 void DistanceVector::handlePingPkg(void* pkg, unsigned short port){
 	uint16_t* temp = (uint16_t*) pkg;
-	uint16_t pkgType = ntohs(*temp);
-	uint16_t size = ntohs(*(temp + 1));
 	uint16_t src = ntohs(*(temp + 2));
 	uint32_t* temp32 = (uint32_t*) (temp + 4);
 	uint32_t timeStamp = ntohl(*temp32);
-	cout<<"Receive PING on node " << this->routerID << " with type PING"
-	 << " with size " << size << " timeStamp " << timeStamp <<
-	" from " << src << "\n";
+	// cout<<"Receive PING on node " << this->routerID << " with type PING" << " with size " << size << " timeStamp " << timeStamp << " from " << src << "\n";
 	sendPong(src, timeStamp, port); 
-	fflush(stdout);
 	free(pkg);
 }
 
@@ -245,45 +200,41 @@ void DistanceVector::NeighborSniff(){
 		*temp = htonl(sys->time());
 		sys->send(i, pkg, 12);		
 	}
-  sys->set_alarm(this->proxy, 10000, &(this->updateEvent));		
+  sys->set_alarm(this->proxy, 10000, &(this->pingEvent));
 }
 
 void DistanceVector::sendPong(uint16_t src, uint32_t timeStamp, unsigned short port){
 	uint16_t* pkg = (uint16_t*) malloc(6 * sizeof(uint16_t));
-  *pkg = PONG;
-  *(pkg + 1) = htons(12);
-  *(pkg + 2) = htons(this->routerID);
-  *(pkg + 3) = htons(src);
-  uint32_t* temp = (uint32_t*) (pkg + 4);
-  *temp = htonl(timeStamp);
-  sys->send(port, pkg, 12);	
+        *pkg = PONG;
+	*(pkg + 1) = htons(12);
+        *(pkg + 2) = htons(this->routerID);
+	*(pkg + 3) = htons(src);
+        uint32_t* temp = (uint32_t*) (pkg + 4);
+        *temp = htonl(timeStamp);
+        sys->send(port, pkg, 12);
 }
 
 void DistanceVector::handlePongPkg(void* pkg, unsigned short port){
 	uint16_t* temp = (uint16_t*) pkg;
-        uint16_t pkgType = ntohs(*temp);
-        uint16_t size = ntohs(*(temp + 1));
-        uint16_t src = ntohs(*(temp + 2));
-	uint16_t dest = ntohs(*(temp + 3));
-        uint32_t* temp32 = (uint32_t*) (temp + 4);
-        uint32_t timeStamp = ntohl(*temp32);
+  uint16_t src = ntohs(*(temp + 2));
+  uint32_t* temp32 = (uint32_t*) (temp + 4);
+  uint32_t timeStamp = ntohl(*temp32);
 	uint16_t delay = (uint16_t)sys->time() - timeStamp;
-        cout<<"Receive PONG on node " << this->routerID << " with type "
-        << pkgType << " with size " << size << " timeStamp " << timeStamp <<
-        " from " << src << "\n";
-	unsigned short nextPort = port;
-	vector<pair<uint16_t, uint16_t>> changedRouting = updateNgbr(src, delay, nextPort);
-	cout<< "DV table update to \n";
+
+  // cout<<"Receive PONG on node " << this->routerID << " with type " << pkgType << " with size " << size << " timeStamp " << timeStamp << " from " << src << "\n";
+
+	vector<pair<uint16_t, uint16_t>> changedRouting = updateNgbr(src, delay);
+	// cout<< "DV table update to \n";
 	printDVTbl();
-	cout<<"Routing Table update to \n";
+	// cout<<"Routing Table update to \n";
 	printRoutingTbl();
 	bool isNew = false;
-	if(linkCosts.count(src) == 0){
-		cout<< "Find a new link. Dump all info to " << src << "\n";
+	//find new ngbr, dump all info I know
+	if(linkInfo.count(src) == 0){
+		// cout<< "Find a new link. Dump all info to " << src << "\n";
 		isNew = true;
 	}	
-	portStatus[port] = std::pair<uint16_t, uint32_t>(src, sys->time());
-	linkCosts[src] = std::pair<unsigned short, uint16_t>(port, delay);
+	linkInfo[src] = port;
 	sendUpdateToAll(changedRouting, isNew, src);
 	free(pkg);
 }
@@ -292,34 +243,35 @@ void DistanceVector::sendUpdateToAll(vector<pair<uint16_t, uint16_t>> changes, b
 	if(changes.size() == 0){
 		return;
 	}
-	for(auto link: linkCosts){
+	for(auto link: linkInfo){
 		if(link.first == src && isNew){
-			sendUpdate(changes, link.first, linkCosts[routingTbl[link.first].first].first, true);
+			sendUpdate(changes, link.first, link.second, true);
 		}
 		else{		
-			sendUpdate(changes, link.first, linkCosts[routingTbl[link.first].first].first, false);
+			sendUpdate(changes, link.first, link.second, false);
 		}
-	} 
+	}
 }
 
 void DistanceVector::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16_t dest, uint16_t port, bool isNew){
-	cout<< "send update to " << dest << "from node" << routerID << "\n";
-	set<pair<uint16_t, uint16_t>> changeCopy;
-	for(auto change: changes){
-		changeCopy.insert(change);
-	}
+	// cout<< "send update to " << dest << "from node" << routerID << "\n";
+
 	vector<pair<uint16_t, uint16_t>> changesPoisonRv;
 	if(isNew){
 		for(auto routingEntry: routingTbl){
-			if(routingEntry.second.second == 0xffff){
-				continue;
-			}
-			changeCopy.insert(pair<uint16_t, uint16_t>(routingEntry.first, routingEntry.second.second));			
+			changes.push_back(pair<uint16_t, uint16_t>(routingEntry.first, routingEntry.second.second));			
 		}
 	}
-	for(auto change: changeCopy){
-		cout<< "change is dest: " <<change.first <<" cost: " << change.second << "\n";
+
+	for(auto change: changes){
+		// cout<< "change is dest: " <<change.first <<" cost: " << change.second << "\n";
                 uint16_t nextHop = routingTbl[change.first].first;
+		//changed entry is the link with ngbr
+		//if(change.first == dest){
+                //        continue;
+               // }
+
+		//poison reverse
                 if(nextHop == dest && change.first != dest){
 			changesPoisonRv.push_back(pair<uint16_t, uint16_t>(change.first, 0xffff));
                         continue;
@@ -349,19 +301,19 @@ void DistanceVector::printDVTbl(){
 	for(auto pairs: dvTbl){
 		unordered_map<uint16_t, TblEntry> paths = pairs.second;
 		for(auto path: paths){
-			cout<<pairs.first << " " << path.first << " " << path.second.cost <<" " << path.second.time << "\n";
+			// cout<<pairs.first << " " << path.first << " " << path.second.cost <<" " << path.second.time << "\n";
 		}
 	}
 }
 
 void DistanceVector::printRoutingTbl(){
 	for(auto pairs: routingTbl){
-		cout<< pairs.first << " " << pairs.second.first << " " << pairs.second.second << "\n";
+		// cout<< pairs.first << " " << pairs.second.first << " " << pairs.second.second << "\n";
 	}
 }
 
 
-vector<pair<uint16_t, uint16_t>> DistanceVector::updateNgbr(uint16_t nextHop, uint16_t delay, unsigned short port){
+vector<pair<uint16_t, uint16_t>> DistanceVector::updateNgbr(uint16_t nextHop, uint16_t delay){
         vector<pair<uint16_t, uint16_t>> changedMinDist;
 
         if(dvTbl.count(nextHop) == 0){
@@ -376,59 +328,50 @@ vector<pair<uint16_t, uint16_t>> DistanceVector::updateNgbr(uint16_t nextHop, ui
 	}
 	
 	uint16_t oldDistToNextHop = 0;
-	if(dvTbl[nextHop].count(nextHop) == 0){
-		oldDistToNextHop = 0;
-	}
-	else{
-		oldDistToNextHop = dvTbl[nextHop][nextHop].cost;	
+	if(dvTbl[nextHop].count(nextHop) != 0){
+		oldDistToNextHop = dvTbl[nextHop][nextHop].cost;
 	}
 
 	if(oldDistToNextHop != delay){
-		cout << "does not equal to dealy \n";
-		changedMinDist.push_back(pair<uint16_t, uint16_t>(nextHop, delay));
+		
 		for(auto it: dvTbl){
 			unordered_map<uint16_t, TblEntry> path = it.second;
-			if(path.count(nextHop) != 0 && (path[nextHop].cost != 0xffff || it.first == nextHop)){
+			//cost == 0xffff means that there wasn't a route to destination, then updating ngbr does not work
+			//except when it is ngbr
+			if((path.count(nextHop) != 0 && path[nextHop].cost != 0xffff) || it.first == nextHop){
 				uint16_t newDistToDest = path[nextHop].cost - oldDistToNextHop + delay;
 				if(delay == 0xffff){
 					newDistToDest = 0xffff;
 				}
-				cout<<"new DIst is " << newDistToDest << " to " << it.first  <<"\n";
+				// cout<<"new DIst is " << newDistToDest << " to " << it.first  <<"\n";
 				path[nextHop] = TblEntry(newDistToDest, curTime);
 				it.second = path;
 				dvTbl[it.first] = it.second;	
 				pair<uint16_t, TblEntry> newMinPair = findMinPath(path);
+				//The minimum is updated
 				if(newMinPair.second.cost != routingTbl[it.first].second){
 					routingTbl[it.first] = pair<uint16_t, uint16_t>(newMinPair.first, newMinPair.second.cost);
                                 	changedMinDist.push_back(pair<uint16_t, uint16_t>(it.first, newMinPair.second.cost));
 				}
 			}
-			if(it.first == nextHop){
-				linkCosts[nextHop] = pair<uint16_t, uint16_t>(port, delay);
-				portStatus[port] = pair<uint16_t, uint32_t>(nextHop, curTime);
-			}
 		}
-		dvTbl[nextHop][nextHop] = TblEntry(delay, curTime);
 	}
-	else{
-		portStatus[port] = pair<uint16_t, uint32_t>(nextHop, curTime);
-		linkCosts[nextHop] = pair<uint16_t, uint16_t>(port, delay);
-		dvTbl[nextHop][nextHop].time = curTime;
-					
+	if(delay == 0xffff){
+		linkInfo.erase(nextHop);
 	}
+	dvTbl[nextHop][nextHop] = TblEntry(delay, curTime);
 	return changedMinDist;
 }
 
 vector<pair<uint16_t, uint16_t>> DistanceVector::updateNonNgbr(uint16_t src, uint16_t dest, uint16_t delay){
-	cout<< "update non ngbr on node " << routerID << "\n";	
+	// cout<< "update non ngbr on node " << routerID << "\n";	
 	vector<pair<uint16_t, uint16_t>> changedMinDist;
-	if(linkCosts.count(src) == 0){
-		cout<< "no way to reach " << src << "\n";
+	if(linkInfo.count(src) == 0){
+		// cout<< "no way to reach " << src << "\n";
 		return changedMinDist;
 	}
 	uint32_t curTime = sys->time();
-	pair<uint16_t, uint16_t> distPairToSrc = linkCosts[src];
-        uint16_t distToSrc = distPairToSrc.second;
+        uint16_t distToSrc = dvTbl[src][src].cost;
 	if(dvTbl.count(dest) == 0){
 		dvTbl[dest] = unordered_map<uint16_t, TblEntry>();
 		uint16_t newDist = distToSrc + delay;
@@ -478,11 +421,11 @@ pair<uint16_t, uint16_t> DistanceVector::getDistance(uint16_t dest){
 }
 
 void DistanceVector::handleNewNeighbor(PortID port){
-  this->log("handleNewNeighbor: Please implement me!\n");
+  // this->log("handleNewNeighbor: Please implement me!\n");
 };
 void DistanceVector::handleTopologyChange(vector<NodeID> oldIDs){
-  this->log("handleTopologyChange: Please implement me!\n");
+  // this->log("handleTopologyChange: Please implement me!\n");
 };
 void DistanceVector::route(Packet* pkt) {
-  this->log("route: Please implement me!\n");
+  // this->log("route: Please implement me!\n");
 };

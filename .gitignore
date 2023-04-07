@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-*
-
-!*.cc
-!*.h
-!Test*
-!Makefile
-!README.md
-!.gitignore
-=======
 *.out
 *.o
 Simulator

@@ -26,6 +26,7 @@ using namespace std;
 
 enum AlarmType{
   UNKNOWN,
+  PING_ALARM,
   NGBR_SNIFF,
   LINK_CHECK,
   ENTRY_CHECK,
@@ -132,18 +133,9 @@ class DistanceVector : public Impl {
     void recv(unsigned short port, void *packet, unsigned short size);
 
   private:
-    AlarmType ngbrSniffEvent = NGBR_SNIFF;
-    AlarmType linkCheckEvent = LINK_CHECK;
-    AlarmType entryCheckEvent = ENTRY_CHECK;
-    AlarmType updateEvent = UPDATE;
-
-    void handleNewNeighbor(PortID port);
-    void handleTopologyChange(vector<NodeID> oldIDs);
-    void route(Packet* pkt);
-
-    void entryCheck();
-    void linkCheck();
-    void handleUpdateEvent();
+    AlarmType pingEvent = PING_ALARM;
+    AlarmType entryCheck = ENTRY_CHECK;
+    AlarmType update = UPDATE;
 
     void NeighborSniff();
     void sendPong(uint16_t src, uint32_t timeStamp, unsigned short port);
@@ -151,19 +143,25 @@ class DistanceVector : public Impl {
     void handlePingPkg(void* pkg, unsigned short port);
     void printRoutingTbl();
     void printDVTbl();
+    void handleLinkCheck();
     pair<uint16_t, uint16_t> getDistance(uint16_t dest);
     std::pair<std::uint16_t, TblEntry> findMinPath(unordered_map<std::uint16_t, TblEntry> pathToDest);
-    vector<pair<uint16_t, uint16_t>> updateNgbr(uint16_t nextHop, uint16_t delay, unsigned short port);
+    vector<pair<uint16_t, uint16_t>> updateNgbr(uint16_t nextHop, uint16_t delay);
     void handleDataPkg(void* pkg);
-    std::unordered_map<unsigned short, pair<uint16_t, uint32_t>> portStatus;
-    std::unordered_map<uint16_t,std::pair<unsigned short, uint16_t>> linkCosts;
+    void handleUpdateEvent();
+    std::unordered_map<uint16_t, unsigned short> linkInfo;
     std::unordered_map<uint16_t,std::pair<uint16_t, uint16_t>> routingTbl;
     std::unordered_map<uint16_t, std::unordered_map<uint16_t, TblEntry>> dvTbl;
     void handleDVPkg(void* pkg, unsigned short port);
     void printPortStatus();
+    void handleEntryCheck();
     void sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16_t dest, uint16_t port, bool isNew);
     void sendUpdateToAll(vector<pair<uint16_t, uint16_t>> changes, bool isNew, uint16_t src);
     vector<pair<uint16_t, uint16_t>> updateNonNgbr(uint16_t src, uint16_t dest, uint16_t delay);
+
+    void handleNewNeighbor(PortID port);
+    void handleTopologyChange(vector<NodeID> oldIDs);
+    void route(Packet* pkt);
 };
 
 typedef struct LinkStateAnnouncementEntry {
@@ -190,8 +188,8 @@ class LinkState : public Impl {
 
     void handleNewNeighbor(PortID port);
     void handleTopologyChange(vector<NodeID> oldIDs);
-    void entryCheck();
     void route(Packet* pkt);
+    void entryCheck();
 
     void displayLSDB();
     void displayRoutingTable();

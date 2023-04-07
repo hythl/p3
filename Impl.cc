@@ -2,7 +2,7 @@
 
 void Impl :: NeighborSniff() {
   for(int i = 0; i < numOfPorts; i++){
-    // this->log("Sending PING to port %d\n", i);
+    this->log("Sending PING to port %d\n", i);
     PingPacket ping(routerID, sys->time());
     void* pingPkt = ping.serialize(); // pkt.serialize() will update ping's length
     sys->send(i, pingPkt, ping.size);
@@ -10,17 +10,17 @@ void Impl :: NeighborSniff() {
 }
 
 void Impl :: handlePingPkt(Packet* pkt, unsigned short port) {
-  // this->log("Received PING from %d\n", pkt->src);
+  this->log("Received PING from %d\n", pkt->src);
   // make a pong packet back to the sender
   PongPacket pong(routerID, pkt->src, pkt->payload, pkt->payloadSize);
   void* pongPkt = pong.serialize(); // pkt.serialize() will update ping's length
-  // this->log("Sending PONG to port %d, dst:%d\n", port, pong.dst);
+  this->log("Sending PONG to port %d, dst:%d\n", port, pong.dst);
   sys->send(port, pongPkt, pong.size);
   pkt->destory();
 }
 
 void Impl :: handlePongPkt(Packet* pkt, unsigned short port) {
-  // this->log("Received PONG from %d\n", pkt->src);
+  this->log("Received PONG from %d\n", pkt->src);
   uint32_t* sentTime = (uint32_t*)pkt->payload;
   uint32_t RTT = sys->time() - *sentTime;
   // update the neighbor map
@@ -34,8 +34,8 @@ void Impl :: handlePongPkt(Packet* pkt, unsigned short port) {
     neighbors[port].lastPingTime = sys->time();
   }
 
-  // this->displayNeighbors();
-  // this->displayPorts();
+  this->displayNeighbors();
+  this->displayPorts();
   pkt->destory();
 }
 

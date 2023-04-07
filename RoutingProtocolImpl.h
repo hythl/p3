@@ -40,7 +40,7 @@ class RoutingProtocolImpl : public RoutingProtocol {
     
  private:
     Node *sys; // To store Node object; used to access GSR9999 interface
-//    Impl* trueImpl;
+    Impl* trueImpl;
 
     unsigned short routerId;
     unsigned short numOfPorts;
