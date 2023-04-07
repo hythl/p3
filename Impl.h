@@ -20,6 +20,7 @@ typedef uint16_t PortID;
 
 #define DATAPORT 0xffff
 #define LINK_TTL 15000
+#define DEBUG true
 
 using namespace std;
 
@@ -44,6 +45,7 @@ class Impl {
     Impl(Node* sys, RoutingProtocol* proxy) {
       this->sys = sys;
       this->proxy = proxy;
+      this->isDebug = DEBUG;
     }
 
     virtual void init(unsigned short num_ports, unsigned short router_id, eProtocolType protocol_type) = 0;
@@ -75,7 +77,7 @@ class Impl {
 
     // events related to neighbors that need to be handled by the routing protocol
     virtual void handleNewNeighbor(PortID port) = 0;
-    virtual void handleNeighborDown(NodeID oldID) = 0;
+    virtual void handleTopologyChange(vector<NodeID> oldIDs) = 0;
 
     virtual void route(Packet* pkt) = 0;
 
@@ -83,6 +85,7 @@ class Impl {
     RoutingProtocol* proxy;
     NodeID routerID;
     uint16_t numOfPorts;
+    bool isDebug;
 
     map<PortID, Neighbor> neighbors;
     map<NodeID, PortID> ports;
@@ -94,6 +97,7 @@ class Impl {
     void linkCheck();
 
     void log(const char* format, ...) {
+      if (!DEBUG) return;
       cout << ">>>>>>Router " << routerID << " [" + to_string(sys->time()) + "]: \t";
       va_list args;
       va_start(args, format);
@@ -101,6 +105,7 @@ class Impl {
     }
 
     void displayNeighbors() {
+      if(!DEBUG) return;
       printf("\t\t\t********* Router %d Neighbors *********\n", routerID);
       for (auto it = neighbors.begin(); it != neighbors.end(); it++)
         printf("\t\t\tRouter %d, port %d, RTT %d, lastPingTime:%d\n", it->second.id, it->second.port, it->second.RTT, it->second.lastPingTime);
@@ -108,6 +113,7 @@ class Impl {
     }
 
     void displayPorts() {
+      if(!DEBUG) return;
       printf("\t\t\t********* Router %d Ports *********\n", routerID);
       for (auto it = ports.begin(); it != ports.end(); it++)
         printf("\t\t\tRouter %d on port %d\n", it->first, it->second);
@@ -132,7 +138,7 @@ class DistanceVector : public Impl {
     AlarmType updateEvent = UPDATE;
 
     void handleNewNeighbor(PortID port);
-    void handleNeighborDown(NodeID oldID);
+    void handleTopologyChange(vector<NodeID> oldIDs);
     void route(Packet* pkt);
 
     void entryCheck();
@@ -183,7 +189,7 @@ class LinkState : public Impl {
     void recv(unsigned short port, void *packet, unsigned short size);
 
     void handleNewNeighbor(PortID port);
-    void handleNeighborDown(NodeID oldID);
+    void handleTopologyChange(vector<NodeID> oldIDs);
     void entryCheck();
     void route(Packet* pkt);
 

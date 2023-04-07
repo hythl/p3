@@ -11,65 +11,65 @@ void DistanceVector::init(unsigned short num_ports, unsigned short router_id, eP
 	this->numOfPorts = num_ports;
 	this->routerID = router_id;
 
-	NeighborSniff();
+  this->NeighborSniff();
 
-  sys->set_alarm(this->proxy, 1000, &(this->linkCheckEvent));  // link expiration check: runs every 1 second
-	sys->set_alarm(this->proxy, 1000, &(this->entryCheckEvent)); // entry expiration check: runs every 1 second
-  sys->set_alarm(this->proxy, 10000, &(this->ngbrSniffEvent)); // neighbor sniff: runs every 10 seconds
-  sys->set_alarm(this->proxy, 30000, &(this->updateEvent));    // update: runs every 30 seconds
-  cout << "router " << router_id << " initialized, using DV" << endl;
-  fflush(stdout);
+  sys->set_alarm(this->proxy, 1000, &linkCheckEvent);  // check for new neighbors every 1 second
+  sys->set_alarm(this->proxy, 1000, &entryCheckEvent);  // check for expired entries every 1 second
+  sys->set_alarm(this->proxy, 10000, &ngbrSniffEvent);  // check for new neighbors every 10 seconds
+  sys->set_alarm(this->proxy, 30000, &updateEvent);     // send update every 30 seconds
+
+  this->log("Initialized, %d ports\n", num_ports);
 }
 
 void DistanceVector::handle_alarm(void *data) {
-  AlarmType at = *(AlarmType*)data;
-  switch(at){
+  AlarmType* alarm = (AlarmType*) data;
+  switch (*alarm) {
     case LINK_CHECK:
-      cout << "Router " << routerID << "> link check alarm triggered, time:" << sys->time() << endl;
-      fflush(stdout);
-      NeighborSniff();
+      this->log("Link Check triggered\n");
+      this->linkCheck();
+      sys->set_alarm(this->proxy, 1000, &linkCheckEvent);
       break;
     case ENTRY_CHECK:
-      cout << "Router " << routerID << "> entry check alarm triggered, time:" << sys->time() << endl;
-      fflush(stdout);
-      entryCheck();
+      this->log("Entry Check triggered\n");
+      // TODO
+      // this->entryCheck();
+      sys->set_alarm(this->proxy, 1000, &entryCheckEvent);
+      break;
+    case NGBR_SNIFF:
+      this->log("Neighbor Sniff triggered\n");
+      this->NeighborSniff();
+      sys->set_alarm(this->proxy, 10000, &ngbrSniffEvent);
       break;
     case UPDATE:
-      cout << "Router " << routerID << "> update alarm triggered, time:" << sys->time() << endl;
-      fflush(stdout);
-      handleUpdateEvent();
+      this->log("Update triggered\n");
+      // TODO
+      sys->set_alarm(this->proxy, 30000, &updateEvent);
       break;
     default:
-
       break;
   }
 }
 
-void DistanceVector::recv(unsigned short port, void *packet, unsigned short size) {
-  if(port == DATAPORT){
-		cout<<"Receive data pkg \n";
-		handleDataPkg(packet);
-		return;
-	}
-	uint8_t* packetTypePkg = (uint8_t*) packet;
-	uint8_t packetType =  *packetTypePkg;
-	switch(packetType){
+void DistanceVector::recv(unsigned short port, void *packetIn, unsigned short size) {
+  Packet* packet = new Packet();
+  packet->deserialize(packetIn);
+  this->log("Received packet from port %d, type: %d, src:%d, dst:%d, size:%d\n", port, packet->type, packet->src, packet->dst, packet->size);
+  switch (packet->type) {
     case PING:
-			handlePingPkg(packet, port);
-			break;
-		case PONG:
-			handlePongPkg(packet, port);
-			break;
-		case DV:
-			handleDVPkg(packet, port);
-			break;
-		case DATA:
-			cout <<"Receive data packet" << "\n";
-			handleDataPkg(packet);			
-			break;
-    		default:
-      			break;
-  	}
+      this->handlePingPkt(packet, port);
+      break;
+    case PONG:
+      this->handlePongPkt(packet, port);
+      break;
+    case DV:
+      // this->handleDVPkg(packet, port);
+      break;
+    case DATA:
+      this->handleDataPkt(packet, port);
+      break;
+    default:
+      break;
+  }
 }
 
 void DistanceVector::handleUpdateEvent(){
@@ -124,7 +124,6 @@ void DistanceVector::linkCheck(){
 			linkCosts.erase(src);
 			sendUpdateToAll(changes, false, src);						
 		}
-		
 	}
 //	printPortStatus();	
 	sys->set_alarm((RoutingProtocol*)this, 1000, &(this->linkCheckEvent));			
@@ -478,6 +477,12 @@ pair<uint16_t, uint16_t> DistanceVector::getDistance(uint16_t dest){
 	return routingTbl[dest];
 }
 
-void DistanceVector::handleNewNeighbor(PortID port){};
-void DistanceVector::handleNeighborDown(NodeID oldID){};
-void DistanceVector::route(Packet* pkt) {}
+void DistanceVector::handleNewNeighbor(PortID port){
+  this->log("handleNewNeighbor: Please implement me!\n");
+};
+void DistanceVector::handleTopologyChange(vector<NodeID> oldIDs){
+  this->log("handleTopologyChange: Please implement me!\n");
+};
+void DistanceVector::route(Packet* pkt) {
+  this->log("route: Please implement me!\n");
+};

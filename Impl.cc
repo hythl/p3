@@ -55,13 +55,23 @@ void Impl :: handleDataPkt(Packet* pkt, unsigned short port) {
 }
 
 void Impl :: linkCheck() {
+  bool topologyChanged = false;
+  vector<NodeID> neighborsGoesDown;
   for (auto it = neighbors.begin(); it != neighbors.end(); it++) {
     if (sys->time() - it->second.lastPingTime > LINK_TTL) {
       this->log("Neighbor %d on port %d is down\n", it->second.id, it->second.port);
       uint16_t oldID = it->second.id;
       neighbors.erase(it);
       ports.erase(oldID);
-      this->handleNeighborDown(oldID);
+      topologyChanged = true;
+      neighborsGoesDown.push_back(oldID);
     }
   }
+
+  this->displayNeighbors();
+  
+  if (topologyChanged)
+    this->handleTopologyChange(neighborsGoesDown);
+  else
+    this->log("We are good, Topology is stable\n");
 }

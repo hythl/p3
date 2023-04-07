@@ -25,7 +25,7 @@ typedef struct NodeStatus {
 
 struct CompareLInkStateEntryCost {
   bool operator()(const LinkStateEntry& lhs, const LinkStateEntry& rhs) const {
-    return lhs.cost < rhs.cost;
+    return lhs.cost > rhs.cost;
   }
 };
 

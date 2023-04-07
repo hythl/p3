@@ -25,6 +25,7 @@ void LinkState::handle_alarm(void *data) {
   switch (*alarm) {
     case LINK_CHECK:
       this->log("Link Check triggered\n");
+      this->linkCheck();
       sys->set_alarm(this->proxy, 1000, &linkCheckEvent);
       break;
     case ENTRY_CHECK:
@@ -91,8 +92,8 @@ void LinkState::handleNewNeighbor(PortID port) {
   this->announce();
 }
 
-void LinkState::handleNeighborDown(NodeID oldID) {
-  this->log("Neighbor %d is down\n", oldID);
+void LinkState::handleTopologyChange(vector<NodeID> oldIDs) {
+  this->log("According to link check, we have some new some topology changes\n");
   
   // a neigbor has not responded to a ping in a while, so we assume it is down
   // change is happening! so update our sequence number
@@ -100,15 +101,15 @@ void LinkState::handleNeighborDown(NodeID oldID) {
 
   // And we need to:
   // 1. update our lsdb
-  PortID port = ports[oldID];
-  Neighbor n = this->neighbors[port];
-  db.removeEntry(routerID, n.id);
-  db.removeEntry(n.id, routerID);
-  db.updateNode(routerID, seqNum, sys->time());
+  for (auto oldID : oldIDs) {
+    db.removeEntry(routerID, oldID);
+    db.removeEntry(oldID, routerID);
+    db.updateNode(routerID, seqNum, sys->time());
+  }
+
   db.updateRoutingTable(routerID);
   this->displayLSDB();
   this->displayRoutingTable();
-
 
   // 2. make an announcement to the network that topology around us has changed
   this->announce();
@@ -137,11 +138,13 @@ void LinkState::route(Packet* pkt) {
 }
 
 void LinkState::displayLSDB() {
+  if (!this->isDebug) return;
   this->log("LSDB:\n");
   this->db.displayLSDB();
 }
 
 void LinkState::displayRoutingTable() {
+  if (!this->isDebug) return;
   this->log("Routing Table:\n");
   this->db.displayRoutingTable();
 }
@@ -241,6 +244,7 @@ void LinkState::handleLSPkt(Packet* pkt, uint16_t port) {
 
 void LinkState::entryCheck() {
   this->log("Checking for expired entries\n");
+  this->displayLSDB();
   db.checkExpiredEntries(sys->time());
   db.updateRoutingTable(routerID);
   this->displayRoutingTable();
