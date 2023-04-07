@@ -1,3 +1,3 @@
 make clean
 make
-./Simulator $1 DV > report.txt
+./Simulator $1 $2 > report.txt
