@@ -205,7 +205,8 @@ void DistanceVector::NeighborSniff(){
 
 void DistanceVector::sendPong(uint16_t src, uint32_t timeStamp, unsigned short port){
 	uint16_t* pkg = (uint16_t*) malloc(6 * sizeof(uint16_t));
-        *pkg = PONG;
+	uint8_t* type = (uint8_t*) pkg;
+	*type = PONG;
 	*(pkg + 1) = htons(12);
         *(pkg + 2) = htons(this->routerID);
 	*(pkg + 3) = htons(src);
@@ -283,7 +284,8 @@ void DistanceVector::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16
 	}
 	uint16_t pkgSize = 8 + 4 * (changesPoisonRv.size());
 	uint16_t* pkg = (uint16_t*) malloc(pkgSize);
-        *pkg = DV;
+	uint8_t* type = (uint8_t*) pkg;
+	*type = DV;
         *(pkg + 1) = htons(pkgSize);
         *(pkg + 2) = htons(this->routerID);
         *(pkg + 3) = htons(dest);
@@ -298,18 +300,22 @@ void DistanceVector::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16
 }
 
 void DistanceVector::printDVTbl(){
+/*
 	for(auto pairs: dvTbl){
 		unordered_map<uint16_t, TblEntry> paths = pairs.second;
 		for(auto path: paths){
 			// cout<<pairs.first << " " << path.first << " " << path.second.cost <<" " << path.second.time << "\n";
 		}
 	}
+*/
 }
 
 void DistanceVector::printRoutingTbl(){
+/*
 	for(auto pairs: routingTbl){
 		// cout<< pairs.first << " " << pairs.second.first << " " << pairs.second.second << "\n";
 	}
+*/
 }
 
 
