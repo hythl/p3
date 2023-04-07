@@ -9,6 +9,7 @@ OBJS =\
 	RoutingProtocolImpl.o\
 	Simulator.o\
 	TblEntry.o\
+	Impl.o\
 	DistanceVector.o\
 	LinkState.o
 
@@ -19,8 +20,10 @@ HEADRES =\
 	Node.h\
 	RoutingProtocol.h\
 	Simulator.h\
-	impl.h\
-	TblEntry.h
+	Impl.h\
+	TblEntry.h\
+	Packet.h\
+	lsdb.h
 
 %.o: %.cc
 	$(CC) $(COPTS) -c $< -o $@
@@ -34,11 +37,13 @@ $(OBJS): global.h
 Event.o: Event.h Link.h Node.h Simulator.h 
 Link.o: Event.h Link.h Node.h Simulator.h 
 Node.o: Event.h Link.h Node.h Simulator.h 
-Simulator.o: Event.h Link.h Node.h RoutingProtocol.h Simulator.h 
-DistanceVector.o: impl.h TblEntry.h
-LinkState.o: impl.h TblEntry.h
-RoutingProtocolImpl.o: RoutingProtocolImpl.h impl.h
+Simulator.o: Event.h Link.h Node.h RoutingProtocol.h Simulator.h
+Impl.o: Impl.h Packet.h
+DistanceVector.o: Impl.h TblEntry.h
+LinkState.o: Impl.h TblEntry.h lsdb.h
+RoutingProtocolImpl.o: RoutingProtocolImpl.h Impl.h
 
 clean:
 	rm -f *.o Simulator
+	rm -f core*
 

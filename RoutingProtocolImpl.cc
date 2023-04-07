@@ -20,17 +20,8 @@ RoutingProtocolImpl::~RoutingProtocolImpl() {}
 
 
 void RoutingProtocolImpl::init(unsigned short num_ports, unsigned short router_id, eProtocolType protocol_type) {
-	this->numOfPorts = num_ports;
-	this->routerId = router_id;
-
-	NeighborSniff();
-
-	sys->set_alarm(this, 1000, &(this->entryCheck)); // entry expiration check: runs every 1 second
-//	sys->set_alarm((RoutingProtocol*)this, 10000, &(this->pingEvent)); // Trigger Ping
-  	sys->set_alarm((RoutingProtocol*)this, 30000, &(this->update));    // update: runs every 30 seconds
-
-  cout << "router " << router_id << " initialized, using DV" << endl;
-  fflush(stdout);
+  trueImpl = protocol_type == P_DV ? (Impl*)new DistanceVector(sys, this) : (Impl*)new LinkState(sys, this);
+  trueImpl->init(num_ports, router_id, protocol_type);
 }
 
 void RoutingProtocolImpl::handle_alarm(void *data) {

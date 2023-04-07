@@ -1,0 +1,1 @@
+Usage: ./Simulator config_file_name DV|LS

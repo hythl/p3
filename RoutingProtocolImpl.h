@@ -3,17 +3,7 @@
 
 
 #include "RoutingProtocol.h"
-#include <unordered_map>
-#include "TblEntry.h"
-
-#define DATAPORT 0xffff
-
-enum AlarmType{
-  UNKNOWN,
-  PING_ALARM,
-  ENTRY_CHECK,
-  UPDATE
-};
+#include "Impl.h"
 
 class RoutingProtocolImpl : public RoutingProtocol {
   public:
