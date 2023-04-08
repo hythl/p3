@@ -3,9 +3,7 @@
 
 DistanceVector::DistanceVector(Node *sysIn, RoutingProtocol *proxyIn) : Impl(sysIn, proxyIn){}
 
-DistanceVector::~DistanceVector() {
-  // add your own code (if needed)
-}
+DistanceVector::~DistanceVector() {}
 
 void DistanceVector::init(unsigned short num_ports, unsigned short router_id, eProtocolType protocol_type) {
 	this->numOfPorts = num_ports;
@@ -300,7 +298,6 @@ void DistanceVector::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16
 }
 
 void DistanceVector::printDVTbl(){
-/*
 	for(auto pairs: dvTbl){
 		unordered_map<uint16_t, TblEntry> paths = pairs.second;
 		for(auto path: paths){
@@ -308,15 +305,12 @@ void DistanceVector::printDVTbl(){
 			 << path.second.cost <<" " << "timestamp: " << path.second.time << "\n";
 		}
 	}
-
 }
 
 void DistanceVector::printRoutingTbl(){
-/*
 	for(auto pairs: routingTbl){
 		 cout<< "Dest: " << pairs.first << " " << "NextHop: " << pairs.second.first << " " <<"Cost: "<< pairs.second.second << "\n";
 	}
-
 }
 
 
