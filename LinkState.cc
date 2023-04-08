@@ -132,30 +132,24 @@ void LinkState::announce() {
   Packet* pkt = new Packet();
   pkt->type = LS;
   pkt->src = routerID;
-  pkt->dst = 0; // broadcast, dst doesn't matter
-  // routerID (2 bytes)
+  pkt->dst = 0; // broadcast, dst doesn't matter, ignore it
+  
   // seqNum (4 bytes)
-  // numOfLinks (2 bytes)
   // links (6 bytes each)
-  pkt->payloadSize = 2 + 4 + 2 + neighbors.size() * 6;
+  pkt->payloadSize = 4 + neighbors.size() * 4;
   pkt->payload = malloc(pkt->payloadSize);
 
-
-  // 2. serialize the payload
+  // 2. serialize the payload (within the payload, we have to adjust the byte order ourselves)
   char* payload = (char*) pkt->payload;
-  uint16_t* routerID = (uint16_t*) payload;
-  *routerID = this->routerID;
-  uint32_t* seqNum = (uint32_t*) (payload + 2);
-  *seqNum = this->seqNum;
-  uint16_t* numOfLinks = (uint16_t*) (payload + 6);
-  *numOfLinks = neighbors.size();
-  uint8_t* links = (uint8_t*) (payload + 8);
+  uint32_t* seqNum = (uint32_t*) payload;
+  *seqNum = htonl(this->seqNum);
+  uint8_t* links = (uint8_t*) (payload + 4);
   for (auto it = neighbors.begin(); it != neighbors.end(); it++) {
     uint16_t* neighborID = (uint16_t*) links;
-    *neighborID = it->second.id;
-    uint32_t* neighborRTT = (uint32_t*) (links + 2);
-    *neighborRTT = it->second.RTT;
-    links += 6;
+    *neighborID = htons(it->second.id);
+    uint16_t* neighborRTT = (uint16_t*) (links + 2);
+    *neighborRTT = htons((uint16_t)it->second.RTT);
+    links += 4;
   }
 
   // 3. flood the packet to all ports
@@ -171,15 +165,12 @@ void LinkState::handleLSPkt(Packet* pkt, uint16_t port) {
   this->log("Received LS packet from port %d\n", port);
   
   // 1. deserialize the payload
+  uint16_t src = pkt->src;
   char* payload = (char*) pkt->payload;
-  uint16_t* srcID = (uint16_t*) payload;
-  uint16_t src = *srcID;
-  uint32_t* seqNum = (uint32_t*) (payload + 2);
-  uint32_t srcSeqNum = *seqNum;
-  uint16_t* numOfLinks = (uint16_t*) (payload + 6);
-  uint16_t srcNumOfLinks = *numOfLinks;
-  uint8_t* links = (uint8_t*) (payload + 8);
-
+  uint32_t* seqNum = (uint32_t*) payload;
+  uint32_t srcSeqNum = ntohl(*seqNum);
+  uint16_t srcNumOfLinks = (pkt->size - 8 - 4) / 4;
+  uint8_t* links = (uint8_t*) (payload + 4);
   this->displayLSDB();
   if (db.needUpdate(src, srcSeqNum)) {
     this->log("Received new packet from %d with seq %d\n", src, srcSeqNum);
@@ -187,10 +178,10 @@ void LinkState::handleLSPkt(Packet* pkt, uint16_t port) {
     db.updateNode(src, srcSeqNum, sys->time());
     for (int i = 0; i < srcNumOfLinks; i++) {
       uint16_t* neighborID = (uint16_t*) links;
-      uint16_t dst = *neighborID;
+      uint16_t dst = ntohs(*neighborID);
       uint32_t* neighborRTT = (uint32_t*) (links + 2);
-      uint32_t cost = *neighborRTT;
-      links += 6;
+      uint32_t cost = ntohs(*neighborRTT);
+      links += 4;
 
       this->log("Received link from %d to %d with cost %d, seq %d\n", src, dst, cost, srcSeqNum);
 
