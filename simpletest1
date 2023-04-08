@@ -1,15 +1,18 @@
 [nodes]
                                                                                                                                                                                                      
-1 2 
+1 2 3 4
                                                                                                                                                                                                      
 [links]
                                                                                                                                                                                                      
 (1,2) delay 0.010 prob 0.0
+(2,3) delay 0.030 prob 0.0
+(2,4) delay 0.050 prob 0.0
+(3,4) delay 0.080 prob 0.0
 
 [events]
                                                                                                                                                                                        
-1.00  xmit (1,2)
-5.00 end
+150.00 linkdying (1,2)
+200.00 end
 
 
                                                                                                                                                                                                      

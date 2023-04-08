@@ -39,7 +39,6 @@ class Packet {
 
     void* serialize() {
       size = 8 + payloadSize;
-      cout << "Packet to be serialized: src = " << src << " dst = " << dst << " size = " << size << " type = " << uint16_t(type)<< endl;
       uint16_t nSize = htons(size);
       uint16_t nSrc = htons(src);
       uint16_t nDst = htons(dst);

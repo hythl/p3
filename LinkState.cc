@@ -83,16 +83,16 @@ void LinkState::handleNewNeighbor(PortID port) {
   // 1. update our lsdb
   Neighbor n = this->neighbors[port];
   db.addNode(routerID, seqNum, sys->time());
-  db.addEntry(routerID, n.id, n.RTT);
-  db.addEntry(n.id, routerID, n.RTT);
+  db.addOrUpdateEntry(routerID, n.id, n.RTT);
+  db.addOrUpdateEntry(n.id, routerID, n.RTT);
   this->displayLSDB();
-  db.updateRoutingTable(routerID);
-  this->displayRoutingTable();
+  db.updateForwardingTable(routerID, this->forwardTable);
+  this->displayForwardTable();
   // 2. make an announcement to the network that topology around us has changed
   this->announce();
 }
 
-void LinkState::handleTopologyChange(vector<NodeID> oldIDs) {
+void LinkState::handleTopologyChange(vector<NodeID> changedIDs) {
   this->log("According to link check, we have some new some topology changes\n");
   
   // a neigbor has not responded to a ping in a while, so we assume it is down
@@ -101,52 +101,28 @@ void LinkState::handleTopologyChange(vector<NodeID> oldIDs) {
 
   // And we need to:
   // 1. update our lsdb
-  for (auto oldID : oldIDs) {
-    db.removeEntry(routerID, oldID);
-    db.removeEntry(oldID, routerID);
-    db.updateNode(routerID, seqNum, sys->time());
+  // first delete all the entries that are no longer valid
+  for (auto changedID : changedIDs) {
+    if (ports.find(changedID) != ports.end()){
+      // this neighbor is still in our neighbor list
+      // update the RTT
+      Neighbor n = this->neighbors[ports[changedID]];
+      db.addOrUpdateEntry(routerID, changedID, n.RTT);
+      db.addOrUpdateEntry(changedID, routerID, n.RTT);
+    } else {
+      // this neighbor is no longer in our neighbor list
+      db.removeEntry(routerID, changedID);
+      db.removeEntry(changedID, routerID);
+    }
   }
 
-  db.updateRoutingTable(routerID);
+  db.updateNode(routerID, seqNum, sys->time());
+  db.updateForwardingTable(routerID, this->forwardTable);
   this->displayLSDB();
-  this->displayRoutingTable();
+  this->displayForwardTable();
 
   // 2. make an announcement to the network that topology around us has changed
   this->announce();
-}
-
-void LinkState::route(Packet* pkt) {
-  int nextHop = db.route(routerID, pkt->dst);
-  if (nextHop == -1) {
-    this->log("No route found to %d, packet dropped\n", pkt->dst);
-    pkt->destory();
-    this->displayRoutingTable();
-    return;
-  }
-
-  if(ports.find(nextHop) == ports.end()) {
-    this->log("No port found for next hop %d, packet dropped [WEIRD STUFF]\n", nextHop);
-    pkt->destory();
-    this->displayPorts();
-    this->displayLSDB();
-    this->displayRoutingTable();
-    return;
-  }
-
-  this->log("Routing packet[%d to %d] to next hop %d\n", pkt->src, pkt->dst, nextHop);
-  sys->send(this->ports[nextHop], pkt->buffer, pkt->size);
-}
-
-void LinkState::displayLSDB() {
-  if (!this->isDebug) return;
-  this->log("LSDB:\n");
-  this->db.displayLSDB();
-}
-
-void LinkState::displayRoutingTable() {
-  if (!this->isDebug) return;
-  this->log("Routing Table:\n");
-  this->db.displayRoutingTable();
 }
 
 void LinkState::announce() {
@@ -219,8 +195,8 @@ void LinkState::handleLSPkt(Packet* pkt, uint16_t port) {
       this->log("Received link from %d to %d with cost %d, seq %d\n", src, dst, cost, srcSeqNum);
 
       // 2. update our lsdb
-      db.addEntry(src, dst, cost);
-      db.addEntry(dst, src, cost);
+      db.addOrUpdateEntry(src, dst, cost);
+      db.addOrUpdateEntry(dst, src, cost);
     }
 
     this->displayLSDB();
@@ -234,8 +210,8 @@ void LinkState::handleLSPkt(Packet* pkt, uint16_t port) {
     } 
 
     // 4. update our routing table
-    db.updateRoutingTable(routerID);
-    this->displayRoutingTable();
+    db.updateForwardingTable(routerID, this->forwardTable);
+    this->displayForwardTable();
   } else 
     this->log("No new information learned, packet dropped\n");
 
@@ -246,6 +222,12 @@ void LinkState::entryCheck() {
   this->log("Checking for expired entries\n");
   this->displayLSDB();
   db.checkExpiredEntries(sys->time());
-  db.updateRoutingTable(routerID);
-  this->displayRoutingTable();
+  db.updateForwardingTable(routerID, this->forwardTable);
+  this->displayForwardTable();
+}
+
+void LinkState::displayLSDB() {
+  if (!this->isDebug) return;
+  this->log("LSDB:\n");
+  this->db.displayLSDB();
 }

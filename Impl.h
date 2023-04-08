@@ -14,13 +14,14 @@
 #include "Packet.h"
 #include "lsdb.h"
 #include "TblEntry.h"
+#include "ForwardTable.h"
 
 typedef uint16_t NodeID;
 typedef uint16_t PortID;
 
 #define DATAPORT 0xffff
 #define LINK_TTL 15000
-#define DEBUG true
+#define DEBUG false
 
 using namespace std;
 
@@ -80,8 +81,6 @@ class Impl {
     virtual void handleNewNeighbor(PortID port) = 0;
     virtual void handleTopologyChange(vector<NodeID> oldIDs) = 0;
 
-    virtual void route(Packet* pkt) = 0;
-
     Node* sys;
     RoutingProtocol* proxy;
     NodeID routerID;
@@ -90,6 +89,7 @@ class Impl {
 
     map<PortID, Neighbor> neighbors;
     map<NodeID, PortID> ports;
+    ForwardTable forwardTable;
     void NeighborSniff();
 
     void handlePingPkt(Packet* pkt, unsigned short port);
@@ -120,6 +120,13 @@ class Impl {
         printf("\t\t\tRouter %d on port %d\n", it->first, it->second);
       printf("\t\t\t********* Router %d Ports *********\n", routerID);
     }
+
+    void displayForwardTable() {
+      if(!DEBUG) return;
+      printf("\t\t\t********* Router %d Forward Table *********\n", routerID);
+      forwardTable.print();
+      printf("\t\t\t********* Router %d Forward Table *********\n", routerID);
+    }
 };
 
 class DistanceVector : public Impl {
@@ -127,7 +134,7 @@ class DistanceVector : public Impl {
     DistanceVector(Node *sys, RoutingProtocol *proxy);
     ~DistanceVector();
 
-    // redefine these functions from Impl
+    // define these functions from Impl
     void init(unsigned short num_ports, unsigned short router_id, eProtocolType protocol_type);
     void handle_alarm(void *data);
     void recv(unsigned short port, void *packet, unsigned short size);
@@ -181,20 +188,22 @@ class LinkState : public Impl {
     LinkState(Node *sys, RoutingProtocol *proxy);
     ~LinkState();
 
-    // redefine these functions from Impl
+    // define these functions from Impl
     void init(unsigned short num_ports, unsigned short router_id, eProtocolType protocol_type);
     void handle_alarm(void *data);
     void recv(unsigned short port, void *packet, unsigned short size);
 
     void handleNewNeighbor(PortID port);
     void handleTopologyChange(vector<NodeID> oldIDs);
-    void route(Packet* pkt);
+
+  private:
+    void announce();
+    void handleLSPkt(Packet* pkt, unsigned short port);
     void entryCheck();
 
     void displayLSDB();
-    void displayRoutingTable();
-    
-  private:
+
+    // constants for alarms
     AlarmType ngbrSniffEvent = NGBR_SNIFF;
     AlarmType linkCheckEvent = LINK_CHECK;
     AlarmType entryCheckEvent = ENTRY_CHECK;
@@ -202,8 +211,6 @@ class LinkState : public Impl {
 
     uint32_t seqNum = 0;
     LinkStateDatabase db;
-    void announce();
-    void handleLSPkt(Packet* pkt, unsigned short port);
 };
 
 #endif

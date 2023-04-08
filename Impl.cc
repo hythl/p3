@@ -30,8 +30,11 @@ void Impl :: handlePongPkt(Packet* pkt, unsigned short port) {
     ports[pkt->src] = port;
     this->handleNewNeighbor(port);
   } else {
-    neighbors[port].RTT = RTT;
     neighbors[port].lastPingTime = sys->time();
+    if(neighbors[port].RTT != RTT){
+      neighbors[port].RTT = RTT;
+      this->handleTopologyChange(vector<NodeID>{pkt->src});
+    }
   }
 
   this->displayNeighbors();
@@ -46,8 +49,25 @@ void Impl :: handleDataPkt(Packet* pkt, unsigned short port) {
     this->log("Received DATA from %d to %d\n", pkt->src, pkt->dst);
 
   // if the packet is not for me, forward it
-  if (pkt->dst != routerID)
-    this->route(pkt);
+  if (pkt->dst != routerID){
+    NodeID nextHop = forwardTable.forward(routerID, pkt->dst);
+    if (nextHop == -1) {
+      this->log("No route to %d\n", pkt->dst);
+      this->displayForwardTable();
+      pkt->destory();
+      return;
+    }
+    if(ports.find(nextHop) == ports.end()) {
+      this->log("No port found for next hop %d, packet dropped [WEIRD STUFF]\n", nextHop);
+      pkt->destory();
+      this->displayPorts();
+      this->displayForwardTable();
+      return;
+    }
+    this->log("Routing packet[%d to %d] to next hop %d\n", pkt->src, pkt->dst, nextHop);
+    sys->send(this->ports[nextHop], pkt->buffer, pkt->size);
+  }
+    
   else{
     this->log("DATA is for me\n");
     pkt->destory();

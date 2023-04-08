@@ -23,7 +23,8 @@ HEADRES =\
 	Impl.h\
 	TblEntry.h\
 	Packet.h\
-	lsdb.h
+	lsdb.h\
+	ForwardTable.h\
 
 %.o: %.cc
 	$(CC) $(COPTS) -c $< -o $@
