@@ -1,0 +1,64 @@
+We first use several small test case to check if we handle events and basic constructions correctly. Then we apply general and more complicated test cases to both link state and distance vector. All of changes and paths are as expected.
+There is a DEBUG flag in the Impl.h file. When we were testing if our components were working correctly, we would compile and run the program with the flag on. It will provide all the important runtime information we need.
+
+There are several test cases for Distance vector. 
+TestInClassDV1 tests the poison reverse and the basic construction of routing and DV table. 
+Topology: (1,2) with RTT 80, (1,3) with RTT 1000, (2,3) with RTT 20. 
+The routing table is as expected:
+Router1
+Dest  nextHop  cost 
+2      2        80
+3      2        100
+
+Router2
+Dest  nextHop  cost 
+1      1        80
+3      3        20
+
+Router3
+Dest  nextHop  cost 
+1      2        100
+2      2        20
+Because of Poison reverse, router2 believes that the distance between 3 and 1 is infinite.
+
+TestInClassDV2 is based on TestInClassDV1. They share the topology, bur the latency between 1 and 2 changes to smaller number.
+The changes of distance vector table and routing table are as expected.
+
+TestInClassDV3 is based on TestInClassDV1. They share the topology, but the latency between 1 and 2 changes to much larger to test both the poison reverse and the change of path. The changes of distance vector table and routing table are as expected. 
+
+TestInClassDV4 is based on TestInClassDV1. They share the topology, but the link between 2 and 3 dies in the middle. The change of routing table and distance table are as expected.
+
+TestInClassDV5 is based on TestInClassDV1. They share the topology, but the link between 2 and 3 dies and then comes up again. The change of routing table and distance vector table are as expected.
+
+There are two general and complex test cases to test the overall performance of both Distance vector and link state. We also check all routing tables (periodic update), ping pong packets and data packets. We expect that some routings change after the operations while some routings remain the same as they are not affected by the changed links.
+
+simpletest3 is a test case with six nodes, seven links and twelve operations.
+Step 1: we send a packet with the source router 1 to the destination router 5 to test the basic functionality of the routings. For this packet, it should be 1-3-4-5.
+Step 2: we send a packet with the source router 2 to the destination router 4. For this packet, the routing should be 2-3-4.
+Step 3: we let the link between router ID 1 and 3 fail. Then no packet could be delivered over this failed link. The routings from 1, 6 to 3, 4, 5 change (we have also checked all routing tables)
+Step 4: we send the packet from 1 to 5 again. As we mention above, the routing should become 1-2-3-4-5.
+Step 5: we change the delay of the link between router ID 5 and 6 to be 0.02 seconds. Then the routings from 1, 6 to 5 change (we have also checked all routing tables)
+STEP 6: we send the packet from 2 to 4 again. Since the routings from 2 to any other routers are not affected by above operations, the routing should remain to be 2-3-4.
+Step 7: we send the packet from 1 to 5 again . In this time, the routing should be 1-6-5 (since 1-3 fails and 5-6 has a less delay 0.02)
+Step 8: we let the link between router ID 5 and 6 fail. No packet could be delivered over this failed link. The routings from 1, 6 to 5 change (we have also checked all routing tables)
+Step 9: we send the packet from 6 to 5. As we mention above, the routing should be 6-1-2-3-4-5.
+Step 10: we heal the link between router ID 1 and 3. Then the routings from 6, 1 to 3, 4, 5 change  (we have also checked all routing tables)
+Step 11: we send the packet from 6 to 5. As we mention above, the routing should be 6-1-3-4-5 (since 1-3 heals and has a smaller delay instead of going though 2)
+Step 12: Finally, we have verified that the program functions well and we close the simulator.
+
+
+simpletest4 is a test case with seven nodes, nine links and twelve operations. 
+Step 1: we send a packet with the source router 2 to the destination router 5 to test the basic functionality of the routings. For this packet, it should be 2-1-3-5.
+Step 2: we send a packet with the source router 4 to the destination router 2. For this packet, the routing should be 4-1-2.
+Step 3: we change the delay of the link between router ID 2 and 3 to be 0.01 second. Then the routings from 7, 2 to 3, 5 change, since now there are links with less costs (we have also checked all routing tables)
+Step 4: we send the packet from 2 to 5 again. In this time, the routing should become 2-3-5.
+Step 5: we let the link between router ID 1 and 3 fail. Then the routings from 1, 2, 6, 7 to 3, 5 all change (we have also checked all routing tables)
+Step 6: we send the packet from 6 to 5. As we mention above, the routing should be 6-7-2-3-5 (since 1-3 fails and 2-3 has a changed delay 0.01)
+STEP 7: we send the packet from 4 to 2 again. Since the routing from 4 to 2 is not affected by above operations, the routing should remain to be 4-1-2.
+Step 8: we change the delay of the link between router ID 1 and 6 to be 0.03 second. Then the routings from 6, 7 to 1, 3, 4, 5 change (we have also checked all routing tables)
+Step 9: we send the packet from 4 to 6. As we mention above, the routing should be 4-1-6.
+Step 10: we heal the link between router ID 1 and 3. Then the routings from 6, 1, 4 to 3, 5 change  (we have also checked all routing tables)
+Step 11: we send the packet from 6 to 5. As we mention above, the routing should be 6-1-3-5 (since 1-3 heals and has a smaller delay instead of going though 4 and 5)
+Step 12: Finally, we have verified that the program functions well and we close the simulator.
+
+

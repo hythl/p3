@@ -298,19 +298,19 @@ void DistanceVector::sendUpdate(vector<pair<uint16_t, uint16_t>> changes, uint16
 }
 
 void DistanceVector::printDVTbl(){
-	for(auto pairs: dvTbl){
-		unordered_map<uint16_t, TblEntry> paths = pairs.second;
-		for(auto path: paths){
-			 cout<<"Dest: " << pairs.first << " " << "NextHop: " << path.first << " " << "Cost: " 
-			 << path.second.cost <<" " << "timestamp: " << path.second.time << "\n";
-		}
-	}
+	// for(auto pairs: dvTbl){
+	// 	unordered_map<uint16_t, TblEntry> paths = pairs.second;
+	// 	for(auto path: paths){
+	// 		 cout<<"Dest: " << pairs.first << " " << "NextHop: " << path.first << " " << "Cost: " 
+	// 		 << path.second.cost <<" " << "timestamp: " << path.second.time << "\n";
+	// 	}
+	// }
 }
 
 void DistanceVector::printRoutingTbl(){
-	for(auto pairs: routingTbl){
-		 cout<< "Dest: " << pairs.first << " " << "NextHop: " << pairs.second.first << " " <<"Cost: "<< pairs.second.second << "\n";
-	}
+	// for(auto pairs: routingTbl){
+	// 	 cout<< "Dest: " << pairs.first << " " << "NextHop: " << pairs.second.first << " " <<"Cost: "<< pairs.second.second << "\n";
+	// }
 }
 
 
@@ -430,7 +430,4 @@ void DistanceVector::handleNewNeighbor(PortID port){
 };
 void DistanceVector::handleTopologyChange(vector<NodeID> oldIDs){
   // this->log("handleTopologyChange: Please implement me!\n");
-};
-void DistanceVector::route(Packet* pkt) {
-  // this->log("route: Please implement me!\n");
 };

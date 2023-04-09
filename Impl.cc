@@ -66,9 +66,7 @@ void Impl :: handleDataPkt(Packet* pkt, unsigned short port) {
     }
     this->log("Routing packet[%d to %d] to next hop %d\n", pkt->src, pkt->dst, nextHop);
     sys->send(this->ports[nextHop], pkt->buffer, pkt->size);
-  }
-    
-  else{
+  } else{
     this->log("DATA is for me\n");
     pkt->destory();
   }

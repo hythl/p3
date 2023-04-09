@@ -168,7 +168,6 @@ class DistanceVector : public Impl {
 
     void handleNewNeighbor(PortID port);
     void handleTopologyChange(vector<NodeID> oldIDs);
-    void route(Packet* pkt);
 };
 
 typedef struct LinkStateAnnouncementEntry {
